@@ -83,7 +83,7 @@ void UpdateGame(void)
 
 	UpdateEnemyEmitter();
 
-	UpdateCollision();
+	//UpdateCollision();
 
 	//スペースキーが押されていて、フェード処理中ではないとき
 	if (GetKeyboardTrigger(DIK_RETURN) && GetFadeState() == FADE_NONE) 

@@ -16,7 +16,9 @@
 // 構造体定義
 //*****************************************************************************
 
-enum class F_OLD_SURFACE {
+enum class F_OLD_SURFACE : const char
+{
+	min_error = -1,
 	no_hit,
 	up,
 	right,
@@ -24,17 +26,26 @@ enum class F_OLD_SURFACE {
 	down
 };
 
-struct INTERSECTION_POS {
+struct INTERSECTION_POS 
+{
 	D3DXVECTOR2 up;
 	D3DXVECTOR2 down;
 	D3DXVECTOR2 left;
 	D3DXVECTOR2 right;
 };
 
+struct  SQUARE_VERTEX 
+{
+	D3DXVECTOR2 left_up;
+	D3DXVECTOR2 right_up;
+	D3DXVECTOR2 right_down;
+	D3DXVECTOR2 left_down;
+};
+
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-void UpdateCollision(void);
+//void UpdateCollision(void);
 
 //=============================================================================
 //こばの便利ツール
@@ -67,3 +78,8 @@ D3DXVECTOR2 CollisionPIS_LEFT_POS(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D
 
 bool CollisionCL(D3DXVECTOR2 circle_pos, D3DXVECTOR2 line_min_pos, D3DXVECTOR2 line_max_pos, float circle_radius);
 bool CollisionCRB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_radius, D3DXVECTOR2 block_size, float block_rot);
+
+SQUARE_VERTEX SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, float block_rot);
+SQUARE_VERTEX SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, D3DXVECTOR2 player_size, float block_rot);
+
+bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_center_pos, int vertex_num);

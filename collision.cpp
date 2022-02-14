@@ -6,7 +6,7 @@
 //=============================================================================
 #include "main.h"
 #include "collision.h"
-#include "math.h"
+//#include "math.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -28,10 +28,10 @@
 //=============================================================================
 // 当たり判定処理
 //=============================================================================
-void UpdateCollision(void)
-{
-
-}
+//void UpdateCollision(void)
+//{
+//
+//}
 
 //=============================================================================
 //こばの便利ツール
@@ -792,4 +792,111 @@ bool CollisionCRB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_ra
 	}
 
 	return false;
+}
+
+
+//=============================================================================
+//四角形の回転後の頂点座標
+//=============================================================================
+SQUARE_VERTEX SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, float block_rot)
+{
+	SQUARE_VERTEX Square_Vertex_Pos;
+
+	//縦、横の長さの半分
+	float half_width, half_height;
+	half_width = block_size.x / 2;
+	half_height = block_size.y / 2;
+
+	// 中心点から頂点に対する角度
+	float BaseAngle = atan2f(half_height, half_width);
+	// 中心点から頂点に対する距離
+	float Radius = sqrtf(LENGTH(D3DXVECTOR2(half_width, half_height)));
+
+	//左上の座標
+	float x = block_pos.x - cosf(BaseAngle + block_rot) * Radius;
+	float y = block_pos.y - sinf(BaseAngle + block_rot) * Radius;
+	Square_Vertex_Pos.left_up = D3DXVECTOR2(x, y);
+	//右上の座標
+	x = block_pos.x + cosf(BaseAngle - block_rot) * Radius;
+	y = block_pos.y - sinf(BaseAngle - block_rot) * Radius;
+	Square_Vertex_Pos.right_up = D3DXVECTOR2(x, y);
+	//左下の座標
+	x = block_pos.x - cosf(BaseAngle - block_rot) * Radius;
+	y = block_pos.y + sinf(BaseAngle - block_rot) * Radius;
+	Square_Vertex_Pos.left_down = D3DXVECTOR2(x, y);
+	//右下の座標
+	x = block_pos.x + cosf(BaseAngle + block_rot) * Radius;
+	y = block_pos.y + sinf(BaseAngle + block_rot) * Radius;
+	Square_Vertex_Pos.right_down = D3DXVECTOR2(x, y);
+
+
+	return(Square_Vertex_Pos);
+}
+
+//=============================================================================
+//プレイヤーの大きさに合わせて広げた四角形の回転後の頂点座標
+//=============================================================================
+SQUARE_VERTEX SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, D3DXVECTOR2 player_size, float block_rot)
+{
+	SQUARE_VERTEX Square_Vertex_Pos;
+
+	//縦、横の長さの半分
+	float half_width, half_height;
+	half_width = (player_size.x + block_size.x) / 2;
+	half_height = (player_size.y + block_size.y) / 2;
+
+	// 中心点から頂点に対する角度
+	float BaseAngle = atan2f(half_height, half_width);
+	// 中心点から頂点に対する距離
+	float Radius = sqrtf(LENGTH(D3DXVECTOR2(half_width, half_height)));
+
+	//左上の座標
+	float x = block_pos.x - cosf(BaseAngle + block_rot) * Radius;
+	float y = block_pos.y - sinf(BaseAngle + block_rot) * Radius;
+	Square_Vertex_Pos.left_up = D3DXVECTOR2(x, y);
+	//右上の座標
+	x = block_pos.x + cosf(BaseAngle - block_rot) * Radius;
+	y = block_pos.y - sinf(BaseAngle - block_rot) * Radius;
+	Square_Vertex_Pos.right_up = D3DXVECTOR2(x, y);
+	//左下の座標
+	x = block_pos.x - cosf(BaseAngle - block_rot) * Radius;
+	y = block_pos.y + sinf(BaseAngle - block_rot) * Radius;
+	Square_Vertex_Pos.left_down = D3DXVECTOR2(x, y);
+	//右下の座標
+	x = block_pos.x + cosf(BaseAngle + block_rot) * Radius;
+	y = block_pos.y + sinf(BaseAngle + block_rot) * Radius;
+	Square_Vertex_Pos.right_down = D3DXVECTOR2(x, y);
+
+
+	return(Square_Vertex_Pos);
+}
+
+bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_center_pos, int vertex_num)
+{
+	float unit = 1.0f / 360.0f;
+	float result = 0.0f;
+
+	D3DXVECTOR2 normal_vector = block_vertex_pos[0] - player_center_pos;
+
+
+	for (int i = 0; i > vertex_num; i++)
+	{
+		D3DXVECTOR2 L1 = block_vertex_pos[i] - player_center_pos;
+		D3DXVECTOR2 L2 = block_vertex_pos[(i + 1) % vertex_num] - player_center_pos;
+
+		float angle = atan2f(L1.y, L2.x);
+
+		float cross = CROSS_PRODUCT(L1, L2);
+
+		if (INNER_PRODUCT(D3DXVECTOR2(cross,0.0f), normal_vector) < 0)
+		{
+			angle *= -1;
+		}
+
+		result += angle;
+	}
+
+	result *= unit;
+
+	return (fabs(result) >= 0.01f);
 }
