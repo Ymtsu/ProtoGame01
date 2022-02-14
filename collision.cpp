@@ -878,8 +878,7 @@ bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_cent
 
 	D3DXVECTOR2 normal_vector = block_vertex_pos[0] - player_center_pos;
 
-
-	for (int i = 0; i > vertex_num; i++)
+	for (int i = 0; i < vertex_num; i++)
 	{
 		D3DXVECTOR2 L1 = block_vertex_pos[i] - player_center_pos;
 		D3DXVECTOR2 L2 = block_vertex_pos[(i + 1) % vertex_num] - player_center_pos;
@@ -888,7 +887,7 @@ bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_cent
 
 		float cross = CROSS_PRODUCT(L1, L2);
 
-		if (INNER_PRODUCT(D3DXVECTOR2(cross,0.0f), normal_vector) < 0)
+		if (INNER_PRODUCT(D3DXVECTOR2(cross, 0.0f), normal_vector) < 0)
 		{
 			angle *= -1;
 		}
