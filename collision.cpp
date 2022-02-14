@@ -798,9 +798,9 @@ bool CollisionCRB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_ra
 //=============================================================================
 //四角形の回転後の頂点座標
 //=============================================================================
-SQUARE_VERTEX SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, float block_rot)
+D3DXVECTOR2* SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, float block_rot)
 {
-	SQUARE_VERTEX Square_Vertex_Pos;
+	D3DXVECTOR2 Square_Vertex_Pos[4] = {};
 
 	//縦、横の長さの半分
 	float half_width, half_height;
@@ -815,30 +815,30 @@ SQUARE_VERTEX SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, flo
 	//左上の座標
 	float x = block_pos.x - cosf(BaseAngle + block_rot) * Radius;
 	float y = block_pos.y - sinf(BaseAngle + block_rot) * Radius;
-	Square_Vertex_Pos.left_up = D3DXVECTOR2(x, y);
+	Square_Vertex_Pos[0] = D3DXVECTOR2(x, y);
 	//右上の座標
 	x = block_pos.x + cosf(BaseAngle - block_rot) * Radius;
 	y = block_pos.y - sinf(BaseAngle - block_rot) * Radius;
-	Square_Vertex_Pos.right_up = D3DXVECTOR2(x, y);
+	Square_Vertex_Pos[1] = D3DXVECTOR2(x, y);
 	//左下の座標
 	x = block_pos.x - cosf(BaseAngle - block_rot) * Radius;
 	y = block_pos.y + sinf(BaseAngle - block_rot) * Radius;
-	Square_Vertex_Pos.left_down = D3DXVECTOR2(x, y);
+	Square_Vertex_Pos[2] = D3DXVECTOR2(x, y);
 	//右下の座標
 	x = block_pos.x + cosf(BaseAngle + block_rot) * Radius;
 	y = block_pos.y + sinf(BaseAngle + block_rot) * Radius;
-	Square_Vertex_Pos.right_down = D3DXVECTOR2(x, y);
+	Square_Vertex_Pos[3] = D3DXVECTOR2(x, y);
 
 
-	return(Square_Vertex_Pos);
+	return Square_Vertex_Pos;
 }
 
 //=============================================================================
 //プレイヤーの大きさに合わせて広げた四角形の回転後の頂点座標
 //=============================================================================
-SQUARE_VERTEX SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, D3DXVECTOR2 player_size, float block_rot)
+D3DXVECTOR2* SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, D3DXVECTOR2 player_size, float block_rot)
 {
-	SQUARE_VERTEX Square_Vertex_Pos;
+	D3DXVECTOR2 Square_Vertex_Pos[4] = {};
 
 	//縦、横の長さの半分
 	float half_width, half_height;
@@ -853,22 +853,22 @@ SQUARE_VERTEX SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block
 	//左上の座標
 	float x = block_pos.x - cosf(BaseAngle + block_rot) * Radius;
 	float y = block_pos.y - sinf(BaseAngle + block_rot) * Radius;
-	Square_Vertex_Pos.left_up = D3DXVECTOR2(x, y);
+	Square_Vertex_Pos[0] = D3DXVECTOR2(x, y);
 	//右上の座標
 	x = block_pos.x + cosf(BaseAngle - block_rot) * Radius;
 	y = block_pos.y - sinf(BaseAngle - block_rot) * Radius;
-	Square_Vertex_Pos.right_up = D3DXVECTOR2(x, y);
+	Square_Vertex_Pos[1] = D3DXVECTOR2(x, y);
 	//左下の座標
 	x = block_pos.x - cosf(BaseAngle - block_rot) * Radius;
 	y = block_pos.y + sinf(BaseAngle - block_rot) * Radius;
-	Square_Vertex_Pos.left_down = D3DXVECTOR2(x, y);
+	Square_Vertex_Pos[2] = D3DXVECTOR2(x, y);
 	//右下の座標
 	x = block_pos.x + cosf(BaseAngle + block_rot) * Radius;
 	y = block_pos.y + sinf(BaseAngle + block_rot) * Radius;
-	Square_Vertex_Pos.right_down = D3DXVECTOR2(x, y);
+	Square_Vertex_Pos[3] = D3DXVECTOR2(x, y);
 
 
-	return(Square_Vertex_Pos);
+	return Square_Vertex_Pos;
 }
 
 bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_center_pos, int vertex_num)
