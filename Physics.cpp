@@ -25,4 +25,15 @@ D3DXVECTOR2 AirResistance(float air_resistance, D3DXVECTOR2 vector)
     return result_vector;
 }
 
+D3DXVECTOR2 SingleBounce(float Coefficient_restitution, D3DXVECTOR2 vector)
+{
+	D3DXVECTOR2 bounce_vector = {};
+	bounce_vector.x = vector.x * -Coefficient_restitution;
+	bounce_vector.y = vector.y * -Coefficient_restitution;
+
+	return bounce_vector;
+}
+
+
+
 
