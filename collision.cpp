@@ -181,7 +181,7 @@ bool CollisionCL(D3DXVECTOR2 circle_pos, D3DXVECTOR2 line_min_pos, D3DXVECTOR2 l
 //ブロックから見た衝突した面を返す
 // 引数のold_posはブロックが動かなければposでOK
 //=============================================================================
-F_OLD_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
+SQUARE_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
 	D3DXVECTOR2 block_old_pos, D3DXVECTOR2 player_size, D3DXVECTOR2 block_size)
 {
 
@@ -221,22 +221,22 @@ F_OLD_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos,
 			//プレイヤーがブロックの上から当たったとき
 			if (vertual_player_old_max.y <= block_min.y && vertual_player_old_max.x > block_min.x && vertual_player_old_min.x < block_max.x)
 			{
-				return F_OLD_SURFACE::up;
+				return SQUARE_SURFACE::up;
 			}
 			//プレイヤーがブロックの下から当たったとき
 			if (vertual_player_old_min.y >= block_max.y && vertual_player_old_max.x > block_min.x && vertual_player_old_min.x < block_max.x)
 			{
-				return F_OLD_SURFACE::down;
+				return SQUARE_SURFACE::down;
 			}
 			//プレイヤーがブロックの左から当たったとき
 			if (vertual_player_old_max.x <= block_min.x && vertual_player_old_max.y > block_min.y && vertual_player_old_min.y < block_max.y)
 			{
-				return F_OLD_SURFACE::left;
+				return SQUARE_SURFACE::left;
 			}
 			//プレイヤーがブロックの右から当たったとき
 			if (vertual_player_old_min.x >= block_max.x && vertual_player_old_max.y > block_min.y && vertual_player_old_min.y < block_max.y)
 			{
-				return F_OLD_SURFACE::right;
+				return SQUARE_SURFACE::right;
 			}
 
 			//プレイヤーの加速度の仮想角度
@@ -258,12 +258,12 @@ F_OLD_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos,
 				if (vertual_velocity_angle > LeftDown_angle)
 				{
 					//上
-					return F_OLD_SURFACE::up;
+					return SQUARE_SURFACE::up;
 				}
 				else
 				{
 					//右
-					return F_OLD_SURFACE::right;
+					return SQUARE_SURFACE::right;
 				}
 			}
 
@@ -273,12 +273,12 @@ F_OLD_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos,
 				if (vertual_velocity_angle > LeftUp_angle)
 				{
 					//右
-					return F_OLD_SURFACE::right;
+					return SQUARE_SURFACE::right;
 				}
 				else
 				{
 					//下
-					return F_OLD_SURFACE::down;
+					return SQUARE_SURFACE::down;
 				}
 			}
 
@@ -288,12 +288,12 @@ F_OLD_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos,
 				if (vertual_velocity_angle > RightDown_angle)
 				{
 					//左
-					return F_OLD_SURFACE::left;
+					return SQUARE_SURFACE::left;
 				}
 				else
 				{
 					//上
-					return F_OLD_SURFACE::up;
+					return SQUARE_SURFACE::up;
 				}
 			}
 
@@ -303,17 +303,17 @@ F_OLD_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos,
 				if (vertual_velocity_angle > RightUp_angle)
 				{
 					//下
-					return F_OLD_SURFACE::down;
+					return SQUARE_SURFACE::down;
 				}
 				else
 				{
 					//左
-					return F_OLD_SURFACE::left;
+					return SQUARE_SURFACE::left;
 				}
 			}
 		}
 	}
-	return F_OLD_SURFACE::no_hit;
+	return SQUARE_SURFACE::no_hit;
 
 }
 
@@ -571,7 +571,7 @@ D3DXVECTOR2 CollisionPIS_LEFT_POS(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D
 //=============================================================================
 //ブロックのどの面に当たるかを予測する＊全部のブロックと判定するので要改善
 //=============================================================================
-F_OLD_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
+SQUARE_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
 	D3DXVECTOR2 block_old_pos, D3DXVECTOR2 player_size, D3DXVECTOR2 block_size)
 {
 
@@ -603,22 +603,22 @@ F_OLD_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3D
 	//プレイヤーがブロックの上から当たったとき
 	if (vertual_player_old_max.y <= block_min.y && vertual_player_old_max.x > block_min.x && vertual_player_old_min.x < block_max.x)
 	{
-		return F_OLD_SURFACE::up;
+		return SQUARE_SURFACE::up;
 	}
 	//プレイヤーがブロックの下から当たったとき
 	if (vertual_player_old_min.y >= block_max.y && vertual_player_old_max.x > block_min.x && vertual_player_old_min.x < block_max.x)
 	{
-		return F_OLD_SURFACE::down;
+		return SQUARE_SURFACE::down;
 	}
 	//プレイヤーがブロックの左から当たったとき
 	if (vertual_player_old_max.x <= block_min.x && vertual_player_old_max.y > block_min.y && vertual_player_old_min.y < block_max.y)
 	{
-		return F_OLD_SURFACE::left;
+		return SQUARE_SURFACE::left;
 	}
 	//プレイヤーがブロックの右から当たったとき
 	if (vertual_player_old_min.x >= block_max.x && vertual_player_old_max.y > block_min.y && vertual_player_old_min.y < block_max.y)
 	{
-		return F_OLD_SURFACE::right;
+		return SQUARE_SURFACE::right;
 	}
 
 	//プレイヤーの加速度の仮想角度
@@ -640,12 +640,12 @@ F_OLD_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3D
 		if (vertual_velocity_angle > LeftDown_angle)
 		{
 			//上
-			return F_OLD_SURFACE::up;
+			return SQUARE_SURFACE::up;
 		}
 		else
 		{
 			//右
-			return F_OLD_SURFACE::right;
+			return SQUARE_SURFACE::right;
 		}
 	}
 
@@ -655,12 +655,12 @@ F_OLD_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3D
 		if (vertual_velocity_angle > LeftUp_angle)
 		{
 			//右
-			return F_OLD_SURFACE::right;
+			return SQUARE_SURFACE::right;
 		}
 		else
 		{
 			//下
-			return F_OLD_SURFACE::down;
+			return SQUARE_SURFACE::down;
 		}
 	}
 
@@ -670,12 +670,12 @@ F_OLD_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3D
 		if (vertual_velocity_angle > RightDown_angle)
 		{
 			//左
-			return F_OLD_SURFACE::left;
+			return SQUARE_SURFACE::left;
 		}
 		else
 		{
 			//上
-			return F_OLD_SURFACE::up;
+			return SQUARE_SURFACE::up;
 		}
 	}
 
@@ -685,16 +685,16 @@ F_OLD_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3D
 		if (vertual_velocity_angle > RightUp_angle)
 		{
 			//下
-			return F_OLD_SURFACE::down;
+			return SQUARE_SURFACE::down;
 		}
 		else
 		{
 			//左
-			return F_OLD_SURFACE::left;
+			return SQUARE_SURFACE::left;
 		}
 	}
 
-	return F_OLD_SURFACE::no_hit;
+	return SQUARE_SURFACE::no_hit;
 
 }
 
@@ -892,7 +892,7 @@ bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_cent
 		float cross = CROSS_PRODUCT(Line1, Line2);
 
 		//ふたつの辺の外積と面の法線との外積がマイナス方向だった場合は逆回転
-		if (INNER_PRODUCT(D3DXVECTOR2(cross, 0.0f), normal_vector) < 0)
+		if (INNER_PRODUCT(D3DXVECTOR2(0.0f,cross), normal_vector) < 0)
 		{
 			angle *= -1;
 		}
@@ -905,3 +905,4 @@ bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_cent
 	//角度の合計が0以上ならtrue
 	return (fabs(result) >= 0.01f);
 }
+
