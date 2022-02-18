@@ -871,22 +871,27 @@ D3DXVECTOR2* SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_
 	return Square_Vertex_Pos;
 }
 
+//=============================================================================
+//多角形の当たり判定（凸法方式）
+//=============================================================================
 bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_center_pos, int vertex_num)
 {
 	float unit = 1.0f / 360.0f;
 	float result = 0.0f;
 
+	//法線ベクトル
 	D3DXVECTOR2 normal_vector = block_vertex_pos[0] - player_center_pos;
 
 	for (int i = 0; i < vertex_num; i++)
 	{
-		D3DXVECTOR2 L1 = block_vertex_pos[i] - player_center_pos;
-		D3DXVECTOR2 L2 = block_vertex_pos[(i + 1) % vertex_num] - player_center_pos;
+		D3DXVECTOR2 Line1 = block_vertex_pos[i] - player_center_pos;
+		D3DXVECTOR2 Line2 = block_vertex_pos[(i + 1) % vertex_num] - player_center_pos;
 
-		float angle = atan2f(L1.y, L2.x);
+		float angle = atan2f(Line1.y, Line2.x);
 
-		float cross = CROSS_PRODUCT(L1, L2);
+		float cross = CROSS_PRODUCT(Line1, Line2);
 
+		//ふたつの辺の外積と面の法線との外積がマイナス方向だった場合は逆回転
 		if (INNER_PRODUCT(D3DXVECTOR2(cross, 0.0f), normal_vector) < 0)
 		{
 			angle *= -1;
@@ -897,5 +902,6 @@ bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_cent
 
 	result *= unit;
 
+	//角度の合計が0以上ならtrue
 	return (fabs(result) >= 0.01f);
 }
