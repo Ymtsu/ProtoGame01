@@ -454,7 +454,6 @@ bool CollisionPIS_LEFT(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 
 	return false;
 }
 
-
 //=========================================================================================
 // ブロックのXかYの値が平行なときブロックとボールの予測交点座標から当たっている座標を求める
 //=========================================================================================
@@ -566,7 +565,6 @@ D3DXVECTOR2 CollisionPIS_LEFT_POS(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D
 
 	return (predict_ball_to_inter_section);
 }
-
 
 //=============================================================================
 //ブロックのどの面に当たるかを予測する＊全部のブロックと判定するので要改善
@@ -794,7 +792,6 @@ bool CollisionCRB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_ra
 	return false;
 }
 
-
 //=============================================================================
 //四角形の回転後の頂点座標
 //=============================================================================
@@ -905,4 +902,3 @@ bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_cent
 	//角度の合計が0以上ならtrue
 	return (fabs(result) >= 0.01f);
 }
-
