@@ -271,3 +271,51 @@ void DrawSpriteColorRotate(int texNo, float X, float Y, float Width, float Heigh
 	// ポリゴン描画
 	GetDeviceContext()->Draw(NUM_VERTEX, 0);
 }
+
+void DrawSpriteFreeVertex(int texNo, D3DXVECTOR3 vertex_left_top, D3DXVECTOR3 vertex_right_top, 
+				D3DXVECTOR3 vertex_left_down, D3DXVECTOR3 vertex_right_down, float U, float V, float UW, float VH)
+{
+	D3D11_MAPPED_SUBRESOURCE msr;
+	GetDeviceContext()->Map(g_VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+	VERTEX_3D* vertex = (VERTEX_3D*)msr.pData;
+
+	// 頂点０番（左上の頂点）
+	vertex[0].Position = vertex_left_top;
+	vertex[0].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	vertex[0].TexCoord = D3DXVECTOR2(U, V);
+
+	// 頂点１番（右上の頂点）
+	vertex[1].Position = vertex_right_top;
+	vertex[1].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	vertex[1].TexCoord = D3DXVECTOR2(U + UW, V);
+
+	// 頂点２番（左下の頂点）
+	vertex[2].Position = vertex_left_down;
+	vertex[2].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	vertex[2].TexCoord = D3DXVECTOR2(U, V + VH);
+
+	// 頂点３番（右下の頂点）
+	vertex[3].Position = vertex_right_down;
+	vertex[3].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	vertex[3].TexCoord = D3DXVECTOR2(U + UW, V + VH);
+
+	GetDeviceContext()->Unmap(g_VertexBuffer, 0);
+
+	// 頂点バッファ設定
+	UINT stride = sizeof(VERTEX_3D);
+	UINT offset = 0;
+	GetDeviceContext()->IASetVertexBuffers(0, 1, &g_VertexBuffer, &stride, &offset);
+
+	// プリミティブトポロジ設定
+	GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	// テクスチャ設定
+	GetDeviceContext()->PSSetShaderResources(0, 1, GetTexture(texNo));
+
+	// マトリクス設定
+	SetWorldViewProjection2D();
+
+	// ポリゴン描画
+	GetDeviceContext()->Draw(NUM_VERTEX, 0);
+}
