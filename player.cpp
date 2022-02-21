@@ -117,7 +117,7 @@ void UpdatePlayer(void)
 	// ’e”­ŽË
 	if (GetKeyboardTrigger(DIK_SPACE))
 	{
-		PlaySound(g_ShotSENo, 0);
+		PlaySounds(g_ShotSENo, 0);
 
 		SetVolume(g_ShotSENo, 0.1f);
 

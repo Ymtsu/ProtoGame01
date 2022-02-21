@@ -19,16 +19,16 @@
 /*------------------------------------------------------------------------------
    プロトタイプ宣言
 ------------------------------------------------------------------------------*/
-HRESULT CheckChunk(HANDLE hFile, DWORD format, DWORD *pChunkSize, DWORD *pChunkDataPosition);
-HRESULT ReadChunkData(HANDLE hFile, void *pBuffer, DWORD dwBuffersize, DWORD dwBufferoffset);
+HRESULT CheckChunk(HANDLE hFile, DWORD format, DWORD* pChunkSize, DWORD* pChunkDataPosition);
+HRESULT ReadChunkData(HANDLE hFile, void* pBuffer, DWORD dwBuffersize, DWORD dwBufferoffset);
 
 /*------------------------------------------------------------------------------
    グローバル変数の定義
 ------------------------------------------------------------------------------*/
-static IXAudio2 *g_pXAudio2 = NULL;									// XAudio2オブジェクトへのインターフェイス
-static IXAudio2MasteringVoice *g_pMasteringVoice = NULL;			// マスターボイス
-static IXAudio2SourceVoice *g_apSourceVoice[MAX_SOUND_NUM] = {};	// ソースボイス
-static BYTE *g_apDataAudio[MAX_SOUND_NUM] = {};						// オーディオデータ
+static IXAudio2* g_pXAudio2 = NULL;									// XAudio2オブジェクトへのインターフェイス
+static IXAudio2MasteringVoice* g_pMasteringVoice = NULL;			// マスターボイス
+static IXAudio2SourceVoice* g_apSourceVoice[MAX_SOUND_NUM] = {};	// ソースボイス
+static BYTE* g_apDataAudio[MAX_SOUND_NUM] = {};						// オーディオデータ
 static DWORD g_aSizeAudio[MAX_SOUND_NUM] = {};						// オーディオデータサイズ
 
 static char g_SoundName[MAX_SOUND_NUM][256] = {};					// サウンド名バッファ
@@ -42,11 +42,11 @@ bool InitSound(HWND hWnd)
 	HRESULT hr;
 
 	// COMライブラリの初期化
-	CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	(void)CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
 	// XAudio2オブジェクトの作成
 	hr = XAudio2Create(&g_pXAudio2, 0);
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "XAudio2オブジェクトの作成に失敗！", "警告！", MB_ICONWARNING);
 
@@ -55,14 +55,14 @@ bool InitSound(HWND hWnd)
 
 		return false;
 	}
-	
+
 	// マスターボイスの生成
 	hr = g_pXAudio2->CreateMasteringVoice(&g_pMasteringVoice);
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "マスターボイスの生成に失敗！", "警告！", MB_ICONWARNING);
 
-		if(g_pXAudio2)
+		if (g_pXAudio2)
 		{
 			// XAudio2オブジェクトの開放
 			g_pXAudio2->Release();
@@ -84,34 +84,34 @@ bool InitSound(HWND hWnd)
 void UninitSound(void)
 {
 	// 全てのサウンドを停止する
-	for(int nCntSound = 0; nCntSound < (int)g_SoundIndex; nCntSound++)
+	for (int nCntSound = 0; nCntSound < (int)g_SoundIndex; nCntSound++)
 	{
-		if(g_apSourceVoice[nCntSound])
+		if (g_apSourceVoice[nCntSound])
 		{
 			// 一時停止
 			g_apSourceVoice[nCntSound]->Stop(0);
-	
+
 			// ソースボイスの破棄
 			g_apSourceVoice[nCntSound]->DestroyVoice();
 			g_apSourceVoice[nCntSound] = NULL;
-	
+
 			// オーディオデータの開放
 			free(g_apDataAudio[nCntSound]);
 			g_apDataAudio[nCntSound] = NULL;
 		}
 	}
-	
+
 	// マスターボイスの破棄
 	g_pMasteringVoice->DestroyVoice();
 	g_pMasteringVoice = NULL;
-	
-	if(g_pXAudio2)
+
+	if (g_pXAudio2)
 	{
 		// XAudio2オブジェクトの開放
 		g_pXAudio2->Release();
 		g_pXAudio2 = NULL;
 	}
-	
+
 	// COMライブラリの終了処理
 	CoUninitialize();
 }
@@ -231,15 +231,10 @@ int LoadSound(char* pFilename)
 	return retIndex;
 }
 
-void SetVolume(int index, float vol)
-{
-	g_apSourceVoice[index]->SetVolume(vol);
-}
-
 /*------------------------------------------------------------------------------
    音声の再生
 ------------------------------------------------------------------------------*/
-void PlaySound(int index, int loopCount)
+void PlaySounds(int index, int loopCount)
 {
 	XAUDIO2_VOICE_STATE xa2state;
 	XAUDIO2_BUFFER buffer;
@@ -248,14 +243,12 @@ void PlaySound(int index, int loopCount)
 	memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
 	buffer.AudioBytes = g_aSizeAudio[index];
 	buffer.pAudioData = g_apDataAudio[index];
-	buffer.Flags      = XAUDIO2_END_OF_STREAM;
-	if (loopCount < 0)
-		loopCount = XAUDIO2_LOOP_INFINITE;
-	buffer.LoopCount  = loopCount;
+	buffer.Flags = XAUDIO2_END_OF_STREAM;
+	buffer.LoopCount = loopCount;
 
 	// 状態取得
 	g_apSourceVoice[index]->GetState(&xa2state);
-	if(xa2state.BuffersQueued != 0)
+	if (xa2state.BuffersQueued != 0)
 	{// 再生中
 		// 一時停止
 		g_apSourceVoice[index]->Stop(0);
@@ -271,6 +264,11 @@ void PlaySound(int index, int loopCount)
 	g_apSourceVoice[index]->Start(0);
 }
 
+void ReplaySound(int index)
+{
+	// 再生
+	g_apSourceVoice[index]->Start(0);
+}
 /*------------------------------------------------------------------------------
    音声の停止
 ------------------------------------------------------------------------------*/
@@ -280,7 +278,7 @@ void StopSound(int index)
 
 	// 状態取得
 	g_apSourceVoice[index]->GetState(&xa2state);
-	if(xa2state.BuffersQueued != 0)
+	if (xa2state.BuffersQueued != 0)
 	{// 再生中
 		// 一時停止
 		g_apSourceVoice[index]->Stop(0);
@@ -290,15 +288,20 @@ void StopSound(int index)
 	}
 }
 
+void PauseSound(int index)
+{
+	g_apSourceVoice[index]->Stop(0);
+}
+
 /*------------------------------------------------------------------------------
    読み込んでいるすべての音声を停止
 ------------------------------------------------------------------------------*/
 void StopSoundAll(void)
 {
 	// 一時停止
-	for(int nCntSound = 0; nCntSound < (int)g_SoundIndex; nCntSound++)
+	for (int nCntSound = 0; nCntSound < (int)g_SoundIndex; nCntSound++)
 	{
-		if(g_apSourceVoice[nCntSound])
+		if (g_apSourceVoice[nCntSound])
 		{
 			// 一時停止
 			g_apSourceVoice[nCntSound]->Stop(0);
@@ -306,10 +309,15 @@ void StopSoundAll(void)
 	}
 }
 
+void SetVolume(int index, float vol)
+{
+	g_apSourceVoice[index]->SetVolume(vol);
+}
+
 /*------------------------------------------------------------------------------
    WAVEフォーマットのチェック
 ------------------------------------------------------------------------------*/
-HRESULT CheckChunk(HANDLE hFile, DWORD format, DWORD *pChunkSize, DWORD *pChunkDataPosition)
+HRESULT CheckChunk(HANDLE hFile, DWORD format, DWORD* pChunkSize, DWORD* pChunkDataPosition)
 {
 	HRESULT hr = S_OK;
 	DWORD dwRead;
@@ -319,78 +327,77 @@ HRESULT CheckChunk(HANDLE hFile, DWORD format, DWORD *pChunkSize, DWORD *pChunkD
 	DWORD dwFileType;
 	DWORD dwBytesRead = 0;
 	DWORD dwOffset = 0;
-	
-	if(SetFilePointer(hFile, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
+
+	if (SetFilePointer(hFile, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
 	{// ファイルポインタを先頭に移動
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
-	
-	while(hr == S_OK)
+
+	while (hr == S_OK)
 	{
-		if(ReadFile(hFile, &dwChunkType, sizeof(DWORD), &dwRead, NULL) == 0)
+		if (ReadFile(hFile, &dwChunkType, sizeof(DWORD), &dwRead, NULL) == 0)
 		{// チャンクの読み込み
 			hr = HRESULT_FROM_WIN32(GetLastError());
 		}
 
-		if(ReadFile(hFile, &dwChunkDataSize, sizeof(DWORD), &dwRead, NULL) == 0)
+		if (ReadFile(hFile, &dwChunkDataSize, sizeof(DWORD), &dwRead, NULL) == 0)
 		{// チャンクデータの読み込み
 			hr = HRESULT_FROM_WIN32(GetLastError());
 		}
 
-		switch(dwChunkType)
+		switch (dwChunkType)
 		{
 		case 'FFIR':
-			dwRIFFDataSize  = dwChunkDataSize;
+			dwRIFFDataSize = dwChunkDataSize;
 			dwChunkDataSize = 4;
-			if(ReadFile(hFile, &dwFileType, sizeof(DWORD), &dwRead, NULL) == 0)
+			if (ReadFile(hFile, &dwFileType, sizeof(DWORD), &dwRead, NULL) == 0)
 			{// ファイルタイプの読み込み
 				hr = HRESULT_FROM_WIN32(GetLastError());
 			}
 			break;
 
 		default:
-			if(SetFilePointer(hFile, dwChunkDataSize, NULL, FILE_CURRENT) == INVALID_SET_FILE_POINTER)
+			if (SetFilePointer(hFile, dwChunkDataSize, NULL, FILE_CURRENT) == INVALID_SET_FILE_POINTER)
 			{// ファイルポインタをチャンクデータ分移動
 				return HRESULT_FROM_WIN32(GetLastError());
 			}
 		}
 
 		dwOffset += sizeof(DWORD) * 2;
-		if(dwChunkType == format)
+		if (dwChunkType == format)
 		{
-			*pChunkSize         = dwChunkDataSize;
+			*pChunkSize = dwChunkDataSize;
 			*pChunkDataPosition = dwOffset;
 
 			return S_OK;
 		}
 
 		dwOffset += dwChunkDataSize;
-		if(dwBytesRead >= dwRIFFDataSize)
+		if (dwBytesRead >= dwRIFFDataSize)
 		{
 			return S_FALSE;
 		}
 	}
-	
+
 	return S_OK;
 }
 
 /*------------------------------------------------------------------------------
    WAVEフォーマットの読み込み
 ------------------------------------------------------------------------------*/
-HRESULT ReadChunkData(HANDLE hFile, void *pBuffer, DWORD dwBuffersize, DWORD dwBufferoffset)
+HRESULT ReadChunkData(HANDLE hFile, void* pBuffer, DWORD dwBuffersize, DWORD dwBufferoffset)
 {
 	DWORD dwRead;
-	
-	if(SetFilePointer(hFile, dwBufferoffset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
+
+	if (SetFilePointer(hFile, dwBufferoffset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
 	{// ファイルポインタを指定位置まで移動
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	if(ReadFile(hFile, pBuffer, dwBuffersize, &dwRead, NULL) == 0)
+	if (ReadFile(hFile, pBuffer, dwBuffersize, &dwRead, NULL) == 0)
 	{// データの読み込み
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
-	
+
 	return S_OK;
 }
-
