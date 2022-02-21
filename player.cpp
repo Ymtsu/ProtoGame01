@@ -16,6 +16,7 @@
 #include "bg.h"
 #include "collision.h"
 #include "Physics.h"
+#include "Chainsaw.h"
 
 
 //*****************************************************************************
@@ -62,8 +63,8 @@ HRESULT InitPlayer(void)
 	g_Player.pos.x = SCREEN_WIDTH / 2;
 	g_Player.pos.y = 370;
 	g_Player.oldpos = D3DXVECTOR2(0.0f, 0.0f);
-	g_Player.w = 50.0f;
-	g_Player.h = 50.0f;
+	g_Player.w = 100.0f;
+	g_Player.h = 100.0f;
 	g_Player.use = true;
 
 	//重力初期化
@@ -183,6 +184,16 @@ void UpdatePlayer(void)
 		AddScore(123);
 	}
 
+	if (GetKeyboardTrigger(DIK_SPACE))
+	{
+		PlaySound(g_ShotSENo, 0);
+
+		SetVolume(g_ShotSENo, 0.1f);
+
+		D3DXVECTOR2 pos = g_Player.pos;
+		SetChainsaw(pos);		// １発目
+	}
+
 	//歩きアニメーション
 	if (g_AnimeWaitFrame > 10)
 	{
@@ -211,4 +222,10 @@ PLAYER *GetPlayer(void)
 	return &g_Player;
 }
 
-
+//=============================================================================
+// プレイヤーの位置を取得
+//=============================================================================
+D3DXVECTOR2 GetPlayerPos(void)
+{
+	return g_Player.pos;
+}
