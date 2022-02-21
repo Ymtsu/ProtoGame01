@@ -15,6 +15,19 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
+
+//*****************************************************************************
+// 構造体定義
+//*****************************************************************************
+
+//プレイヤーの方向構造体
+typedef enum  DIRCTION {
+	Right,
+	Left,
+	Up,
+	Down
+}PLAYER_DIR;
+
 // プレイヤー構造体
 struct PLAYER
 {
@@ -24,7 +37,7 @@ struct PLAYER
 	D3DXVECTOR2				oldpos;					// ポリゴンの座標
 	float					rot;					// ポリゴンの回転量
 	int						texNo;					// テクスチャ番号
-
+	int						dirction;
 };
 
 
@@ -38,3 +51,5 @@ void DrawPlayer(void);
 
 PLAYER *GetPlayer(void);
 D3DXVECTOR2 GetPlayerPos(void);
+int GetPlayerDir(void);
+void PlayerMoveReset(void);

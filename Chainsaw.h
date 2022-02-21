@@ -23,6 +23,7 @@ struct CHAINSAW
 	D3DXVECTOR2				pos;					// バレットの座標
 	D3DXVECTOR2				CollisionSize;			//あたり判定の大きさ
 	D3DXVECTOR2				CollisionPos;			//あたり判定の位置座標
+	int						direction;
 	float					rot;					// バレットの回転量
 	int						texNo;					// 何番目のテクスチャーを使用するのか
 	int						CollisionTextNo;		// あたり判定テクスチャ―
