@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "collision.h"
+#include "Hit_stop.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -31,6 +32,7 @@ static CHAINSAW g_Chainsaw[CHAINSAW_MAX];							// チェンソー構造体
 static D3DXVECTOR2 g_Collisiona_Move = D3DXVECTOR2(0.0f, 0.0f);
 static bool Move_x[CHAINSAW_MAX];
 static bool Move_y[CHAINSAW_MAX];
+static int ChangeHit = 0;
 
 //=============================================================================
 // 初期化処理
@@ -43,8 +45,8 @@ HRESULT InitChainsaw(void)
 	int ColiTexNo = LoadTexture("data/Texture/collisionDisplay.png");
 
 	//あたり判定可視化の位置移動の初期化
-	g_Collisiona_Move.x = 75.0f / 10.0f;
-	g_Collisiona_Move.y = 60.0f / 20.0f;
+	g_Collisiona_Move.x = 75.0f / 20.0f;
+	g_Collisiona_Move.y = 60.0f / 40.0f;
 
 	// チェンソー構造体の初期化
 	for (int i = 0; i < CHAINSAW_MAX; i++)
@@ -54,13 +56,14 @@ HRESULT InitChainsaw(void)
 		g_Chainsaw[i].h = 100.0f;
 		g_Chainsaw[i].pos = D3DXVECTOR2(300, 300.0f);
 		g_Chainsaw[i].CollisionPos = D3DXVECTOR2(0.0f, 0.0f);
-		g_Chainsaw[i].CollisionSize = D3DXVECTOR2(30.0f, 50.0f);
+		g_Chainsaw[i].CollisionSize = D3DXVECTOR2(100.0f, 50.0f);
 		g_Chainsaw[i].rot = 0.0f;
 		g_Chainsaw[i].texNo = texNo;
 		g_Chainsaw[i].CollisionTextNo = ColiTexNo;
 		g_Chainsaw[i].Anime = 0;
 		Move_x[i] = false;
 		Move_y[i] = false;
+		g_Chainsaw[i].Vector = D3DXVECTOR2(0.0f, 100.0f);
 		
 	}
 
@@ -92,75 +95,85 @@ void UpdateChainsaw(void)
 
 			g_Chainsaw[i].pos = pPlayer_pos;
 
-			//チェンソーアニメーション
-			switch(g_Chainsaw[i].Anime)
-			{
-			case 1:
- 				Move_x[i] = true;
-				if (g_Chainsaw[i].direction == Right) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + g_Collisiona_Move.x *g_Chainsaw[i].Anime), (pPlayer_pos.y - 30.0f));
-				}
+			////チェンソーアニメーション
+			//switch(g_Chainsaw[i].Anime)
+			//{
+			//case 1:
+ 		//		Move_x[i] = true;
+			//	if (g_Chainsaw[i].direction == Right) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + g_Collisiona_Move.x *g_Chainsaw[i].Anime), (pPlayer_pos.y - 30.0f));
+			//	}
 
-				if (g_Chainsaw[i].direction == Left) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - g_Collisiona_Move.x *g_Chainsaw[i].Anime), (pPlayer_pos.y - 30.0f));
-				}
-				break;
+			//	if (g_Chainsaw[i].direction == Left) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - g_Collisiona_Move.x *g_Chainsaw[i].Anime), (pPlayer_pos.y - 30.0f));
+			//	}
+			//	break;
 
-			case 10:
-				Move_x[i] = false;
-				Move_y[i] = true;
-				g_Chainsaw[i].CollisionSize = D3DXVECTOR2(50.0f, 50.0f);
-				
-				if (g_Chainsaw[i].direction == Right) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + 50.0f + 25.0f), (pPlayer_pos.y - 30.0f + g_Collisiona_Move.y * (g_Chainsaw[i].Anime - 10)));
-				}
+			//case 20:
+			//	Move_x[i] = false;
+			//	Move_y[i] = true;
+			//	g_Chainsaw[i].CollisionSize = D3DXVECTOR2(50.0f, 50.0f);
+			//	
+			//	if (g_Chainsaw[i].direction == Right) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + 50.0f + 25.0f), (pPlayer_pos.y - 30.0f + g_Collisiona_Move.y * (g_Chainsaw[i].Anime - 10)));
+			//	}
 
-				if (g_Chainsaw[i].direction == Left) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - 50.0f - 25.0f), (pPlayer_pos.y - 30.0f + g_Collisiona_Move.y * (g_Chainsaw[i].Anime - 10)));
-				}
-				break;
+			//	if (g_Chainsaw[i].direction == Left) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - 50.0f - 25.0f), (pPlayer_pos.y - 30.0f + g_Collisiona_Move.y * (g_Chainsaw[i].Anime - 10)));
+			//	}
+			//	break;
 
-			case 30:
-				Move_x[i] = false;
-				Move_y[i] = false;
+			//case 60:
+			//	Move_x[i] = false;
+			//	Move_y[i] = false;
 
-				if (g_Chainsaw[i].direction == Right) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + 50.0f + 25.0f), (pPlayer_pos.y));
-				}
-				
-				if (g_Chainsaw[i].direction == Left) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - 50.0f - 25.0f), (pPlayer_pos.y));
-				}
-				break;
-			
+			//	if (g_Chainsaw[i].direction == Right) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + 50.0f + 25.0f), (pPlayer_pos.y));
+			//	}
+			//	
+			//	if (g_Chainsaw[i].direction == Left) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - 50.0f - 25.0f), (pPlayer_pos.y));
+			//	}
+			//	break;
+			//
 
-			default:
-				break;
+			//default:
+			//	break;
 
 
-			}
+			//}
 
-			//あたり判定のX座標移動
-			if (Move_x[i] == true) {
-				if (g_Chainsaw[i].direction == Right) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + g_Collisiona_Move.x *(g_Chainsaw[i].Anime - 1)), (pPlayer_pos.y - 30.0f));
-				}
-				
-				if (g_Chainsaw[i].direction == Left) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - g_Collisiona_Move.x *(g_Chainsaw[i].Anime - 1)), (pPlayer_pos.y - 30.0f));
-				}
-			}
-			
-			//あたり判定Y座標移動
-			if (Move_y[i] == true) {
-				if (g_Chainsaw[i].direction == Right) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + 50.0f + 25.0f), (pPlayer_pos.y - 30.0f + g_Collisiona_Move.y * (g_Chainsaw[i].Anime - 10)));
-				}
-				
-				if (g_Chainsaw[i].direction == Left) {
-					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - 50.0f - 25.0f), (pPlayer_pos.y - 30.0f + g_Collisiona_Move.y * (g_Chainsaw[i].Anime - 10)));
-				}
-			}
+
+			float circle_block_vector_length = sqrtf(LENGTH(g_Chainsaw[i].Vector));
+			//ボールとブロックを結んだ仮想ベクトル
+			g_Chainsaw[i].pos.x = pPlayer_pos.x + circle_block_vector_length * cosf(g_Chainsaw[i].rot);
+			g_Chainsaw[i].pos.y = pPlayer_pos.y + circle_block_vector_length * sinf(g_Chainsaw[i].rot);
+
+
+			g_Chainsaw[i].CollisionPos.x = pPlayer_pos.x + circle_block_vector_length * cosf(g_Chainsaw[i].rot);
+			g_Chainsaw[i].CollisionPos.y = pPlayer_pos.y + circle_block_vector_length * sinf(g_Chainsaw[i].rot);
+
+			////あたり判定のX座標移動
+			//if (Move_x[i] == true) {
+			//	if (g_Chainsaw[i].direction == Right) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + g_Collisiona_Move.x *(g_Chainsaw[i].Anime - 1)), (pPlayer_pos.y - 30.0f));
+			//	}
+			//	
+			//	if (g_Chainsaw[i].direction == Left) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - g_Collisiona_Move.x *(g_Chainsaw[i].Anime - 1)), (pPlayer_pos.y - 30.0f));
+			//	}
+			//}
+			//
+			////あたり判定Y座標移動
+			//if (Move_y[i] == true) {
+			//	if (g_Chainsaw[i].direction == Right) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x + 50.0f + 25.0f), (pPlayer_pos.y - 30.0f + g_Collisiona_Move.y * (g_Chainsaw[i].Anime - 10)));
+			//	}
+			//	
+			//	if (g_Chainsaw[i].direction == Left) {
+			//		g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - 50.0f - 25.0f), (pPlayer_pos.y - 30.0f + g_Collisiona_Move.y * (g_Chainsaw[i].Anime - 10)));
+			//	}
+			//}
 
 			ENEMY * pEnemy = GetEnemy();
 
@@ -171,6 +184,7 @@ void UpdateChainsaw(void)
 					for (int z = 0; z < CHAINSAW_MAX; z++)
 					{
 						if (CollisionBB(g_Chainsaw[z].CollisionPos, pEnemy[i].pos, D3DXVECTOR2((g_Chainsaw[z].w), (g_Chainsaw[z].h)), D3DXVECTOR2((pEnemy[i].w), (pEnemy[i].h)))) {
+							g_Chainsaw[i].Anime = HitStop(g_Chainsaw[i].Anime, g_Chainsaw[i].Anime, (g_Chainsaw[i].Anime +5), 5);
 							DelEnemyHP(i);
 						}
 					}
@@ -211,10 +225,10 @@ void DrawChainsaw(void)
 			D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 			// １枚のポリゴンの頂点とテクスチャ座標を設定
-			DrawSpriteColorRotate(g_Chainsaw[i].texNo, px, py, pw, ph, 0.0f, 0.0f, 1.0f, 1.0f, col, g_Chainsaw[i].rot);
+			/*DrawSpriteColorRotate(g_Chainsaw[i].texNo, px, py, pw, ph, 0.0f, 0.0f, 1.0f, 1.0f, col, g_Chainsaw[i].rot);*/
 
 			//あたり判定テクスチャー（後で消すかも）
-			DrawSprite(g_Chainsaw[i].CollisionTextNo, g_Chainsaw[i].CollisionPos.x, g_Chainsaw[i].CollisionPos.y, g_Chainsaw[i].CollisionSize.x, g_Chainsaw[i].CollisionSize.y, 0.0f, 0.0f, 1.0f, 1.0f);
+			DrawSpriteColorRotate(g_Chainsaw[i].CollisionTextNo, g_Chainsaw[i].CollisionPos.x, g_Chainsaw[i].CollisionPos.y, g_Chainsaw[i].CollisionSize.x, g_Chainsaw[i].CollisionSize.y, 0.0f, 0.0f, 1.0f, 1.0f, col, g_Chainsaw[i].rot);
 		}
 	}
 
@@ -243,8 +257,9 @@ void SetChainsaw(D3DXVECTOR2 pos)
 			g_Chainsaw[i].use = true;							// 使用状態へ変更する
 			g_Chainsaw[i].pos = pos;							// 座標をセット
 			g_Chainsaw[i].Anime = 0;							//アニメーションリセット
-			g_Chainsaw[i].rot = 1.25f;							//回転位置を上になるように設定
+			g_Chainsaw[i].rot = 3.75f;							//回転位置を上になるように設定
 			g_Chainsaw[i].direction = GetPlayerDir();			//どっち方向に使用するのかを設定する
+			g_Chainsaw[i].Vector = D3DXVECTOR2(0.0f, 100.0f);
 			return;												// 1発セットしたので終了する
 		}
 	}
