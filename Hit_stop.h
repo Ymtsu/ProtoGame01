@@ -8,3 +8,5 @@
 // 　　 ヒットストップが終わる時間, どのくらいの遅さになるかの変化率(0～10)
 //戻り値：現在のアニメーション（60枚アニメーション前提）
 int HitStop(int now_time, int start_time, int finish_time, int rate_of_change);
+
+float HitStop_angle(float now_angle, float start_angle, float finish_angle, float rate_of_change);
