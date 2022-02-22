@@ -31,7 +31,7 @@ static CHAINSAW g_Chainsaw[CHAINSAW_MAX];							// チェンソー構造体
 
 static D3DXVECTOR2 g_Collisiona_Move = D3DXVECTOR2(0.0f, 0.0f);
 static int ChangeHit = 0;
-static float Moverot = 0.0f;
+static float Moverot[CHAINSAW_MAX] = { 0.0f };
 
 //=============================================================================
 // 初期化処理
@@ -61,10 +61,11 @@ HRESULT InitChainsaw(void)
 		g_Chainsaw[i].CollisionTextNo = ColiTexNo;
 		g_Chainsaw[i].Anime = 0;		
 		g_Chainsaw[i].Vector = D3DXVECTOR2(0.0f, 100.0f);
+		Moverot[i] = 0.1f;
 		
 	}
 
-	Moverot = 0.1f;
+	
 	return S_OK;
 }
 
@@ -86,7 +87,7 @@ void UpdateChainsaw(void)
 		if (g_Chainsaw[i].use == true)	// このチェンソーが使われている？
 		{								// Yes
 			
-			g_Chainsaw[i].rot += Moverot;
+			g_Chainsaw[i].rot += Moverot[i];
 			
 			//playerの座標取得
 			D3DXVECTOR2 pPlayer_pos = GetPlayerPos();
@@ -116,7 +117,20 @@ void UpdateChainsaw(void)
 					for (int z = 0; z < CHAINSAW_MAX; z++)
 					{
 						if (CollisionBB(g_Chainsaw[z].CollisionPos, pEnemy[i].pos, D3DXVECTOR2((g_Chainsaw[z].w), (g_Chainsaw[z].h)), D3DXVECTOR2((pEnemy[i].w), (pEnemy[i].h)))) {
-							Moverot = Hitstop_test(Moverot, g_Chainsaw[z].rot, (g_Chainsaw[z].rot + 1.0f), 0.5f);
+							switch (pEnemy[i].kind)
+							{
+							case 0:
+								Moverot[z] = Hitstop_test(Moverot[z], g_Chainsaw[z].rot, (g_Chainsaw[z].rot + 1.0f), 0.8f);
+								break;
+
+							case 1:
+								Moverot[z] = Hitstop_test(Moverot[z], g_Chainsaw[z].rot, (g_Chainsaw[z].rot + 1.0f), 0.5f);
+								break;
+
+							default:
+								break;
+							}
+							
 							DelEnemyHP(i);
 						}
 					}
@@ -189,7 +203,7 @@ void SetChainsaw(D3DXVECTOR2 pos)
 			g_Chainsaw[i].rot = 3.75f;							//回転位置を上になるように設定
 			g_Chainsaw[i].direction = GetPlayerDir();			//どっち方向に使用するのかを設定する
 			g_Chainsaw[i].Vector = D3DXVECTOR2(0.0f, 100.0f);
-			Moverot = 0.1f; 
+			Moverot[i] = 0.1f; 
 			return;												// 1発セットしたので終了する
 		}
 	}

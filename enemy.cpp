@@ -167,7 +167,7 @@ void SetEnemy(D3DXVECTOR2 pos,int EnemyKind)
 				break;
 
 			case 1:
-				g_Enemy[i].HP = 50;
+				g_Enemy[i].HP = 10;
 				g_Enemy[i].kind = EnemyKind;
 				g_Enemy[i].texNo = EenmyTexture_02;
 				break;
