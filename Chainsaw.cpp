@@ -8,6 +8,8 @@
 #include "texture.h"
 #include "sprite.h"
 #include "Player.h"
+#include "Enemy.h"
+#include "collision.h"
 
 //*****************************************************************************
 // É}ÉNÉçíËã`
@@ -157,6 +159,22 @@ void UpdateChainsaw(void)
 				
 				if (g_Chainsaw[i].direction == Left) {
 					g_Chainsaw[i].CollisionPos = D3DXVECTOR2((pPlayer_pos.x - 50.0f - 25.0f), (pPlayer_pos.y - 30.0f + g_Collisiona_Move.y * (g_Chainsaw[i].Anime - 10)));
+				}
+			}
+
+			ENEMY * pEnemy = GetEnemy();
+
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				if (pEnemy[i].use == true)
+				{
+					for (int z = 0; z < CHAINSAW_MAX; z++)
+					{
+						if (CollisionBB(g_Chainsaw[z].CollisionPos, pEnemy[i].pos, D3DXVECTOR2((g_Chainsaw[z].w), (g_Chainsaw[z].h)), D3DXVECTOR2((pEnemy[i].w), (pEnemy[i].h)))) {
+							DelEnemyHP(i);
+						}
+					}
+					
 				}
 			}
 

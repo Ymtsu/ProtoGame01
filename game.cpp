@@ -47,7 +47,7 @@ void InitGame(void)
 {
 	InitPlayer();
 	InitEnemy();
-	InitEnemyEmitter();
+	/*InitEnemyEmitter();*/
 	InitBullet();
 	InitChainsaw();
 	InitScore();
@@ -85,7 +85,7 @@ void UpdateGame(void)
 	UpdateChainsaw();
 	UpdateScore();
 
-	UpdateEnemyEmitter();
+	/*UpdateEnemyEmitter();*/
 
 	UpdateCollision();
 

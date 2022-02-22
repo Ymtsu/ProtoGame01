@@ -17,6 +17,7 @@
 #include "collision.h"
 #include "Physics.h"
 #include "Chainsaw.h"
+#include "Enemy.h"
 
 
 //*****************************************************************************
@@ -213,6 +214,18 @@ void UpdatePlayer(void)
 	}
 
 
+	ENEMY * pEnemy = GetEnemy();
+
+	for (int i = 0; i < ENEMY_MAX; i++)
+	{
+		if (pEnemy[i].use == true)
+		{
+			if (CollisionBB(g_Player.pos,pEnemy[i].pos, D3DXVECTOR2((g_Player.w), (g_Player.h)), D3DXVECTOR2((pEnemy[i].w), (pEnemy[i].h)))) {
+				g_Player.w -= 1.0f;
+				g_Player.h -= 1.0f;
+			}
+		}
+	}
 	//// 弾発射
 	//if (GetKeyboardTrigger(DIK_SPACE))
 	//{
@@ -289,4 +302,12 @@ int GetPlayerDir(void)
 void PlayerMoveReset(void)
 {
 	g_PlayerMoveFlg = 0;
+}
+
+//=============================================================================
+// マップナンバーを取得
+//=============================================================================
+int GetMapNumber(void)
+{
+	return g_MoveStage;
 }

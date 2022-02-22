@@ -53,3 +53,4 @@ PLAYER *GetPlayer(void);
 D3DXVECTOR2 GetPlayerPos(void);
 int GetPlayerDir(void);
 void PlayerMoveReset(void);
+int GetMapNumber(void);

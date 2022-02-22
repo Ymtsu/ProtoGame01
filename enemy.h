@@ -23,6 +23,9 @@ struct ENEMY
 	float					rot;		// ポリゴンの回転量
 	int						texNo;		// 何番目のテクスチャーを使用するのか
 
+	int						HP;			//エネミーHP
+	int						kind;		//エネミーの種類
+
 	int						state;		// 状態
 	int						frame;		// フレーム
 };
@@ -37,5 +40,6 @@ void UpdateEnemy(void);
 void DrawEnemy(void);
 
 ENEMY *GetEnemy(void);
-void SetEnemy(D3DXVECTOR2 pos);
+void SetEnemy(D3DXVECTOR2 pos, int EnemyKind);
+void DelEnemyHP(int EnemyNum);
 
