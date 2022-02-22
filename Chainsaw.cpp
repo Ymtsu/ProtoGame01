@@ -30,9 +30,8 @@ static CHAINSAW g_Chainsaw[CHAINSAW_MAX];							// チェンソー構造体
 
 
 static D3DXVECTOR2 g_Collisiona_Move = D3DXVECTOR2(0.0f, 0.0f);
-static bool Move_x[CHAINSAW_MAX];
-static bool Move_y[CHAINSAW_MAX];
 static int ChangeHit = 0;
+static float Moverot = 0.0f;
 
 //=============================================================================
 // 初期化処理
@@ -60,13 +59,12 @@ HRESULT InitChainsaw(void)
 		g_Chainsaw[i].rot = 0.0f;
 		g_Chainsaw[i].texNo = texNo;
 		g_Chainsaw[i].CollisionTextNo = ColiTexNo;
-		g_Chainsaw[i].Anime = 0;
-		Move_x[i] = false;
-		Move_y[i] = false;
+		g_Chainsaw[i].Anime = 0;		
 		g_Chainsaw[i].Vector = D3DXVECTOR2(0.0f, 100.0f);
 		
 	}
 
+	Moverot = 0.1f;
 	return S_OK;
 }
 
@@ -87,8 +85,8 @@ void UpdateChainsaw(void)
 	{
 		if (g_Chainsaw[i].use == true)	// このチェンソーが使われている？
 		{								// Yes
-			g_Chainsaw[i].Anime += 1;
-			g_Chainsaw[i].rot += 0.1f;
+			
+			g_Chainsaw[i].rot += Moverot;
 			
 			//playerの座標取得
 			D3DXVECTOR2 pPlayer_pos = GetPlayerPos();
@@ -118,7 +116,7 @@ void UpdateChainsaw(void)
 					for (int z = 0; z < CHAINSAW_MAX; z++)
 					{
 						if (CollisionBB(g_Chainsaw[z].CollisionPos, pEnemy[i].pos, D3DXVECTOR2((g_Chainsaw[z].w), (g_Chainsaw[z].h)), D3DXVECTOR2((pEnemy[i].w), (pEnemy[i].h)))) {
-							g_Chainsaw[i].Anime = HitStop_angle(3.75f, 3.75f, (3.75f + 1.0f), 0.5f);
+							Moverot = Hitstop_test(Moverot, g_Chainsaw[z].rot, (g_Chainsaw[z].rot + 1.0f), 0.5f);
 							DelEnemyHP(i);
 						}
 					}
@@ -127,17 +125,14 @@ void UpdateChainsaw(void)
 			}
 
 			//チェンソーの画像がある程度回転したらリセットするように設定
-			if (g_Chainsaw[i].rot >= 10.0f)
-			{
-				g_Chainsaw[i].rot = 0.0f;
-			}
-			
-			// 画面外まで進んだ？
-			if (g_Chainsaw[i].Anime == 30)	// 自分の大きさを考慮して画面外か判定している
+			if (g_Chainsaw[i].rot >= 6.5f)
 			{
 				g_Chainsaw[i].use = false;
 				PlayerMoveReset();
+				SetFlag();
 			}
+			
+			
 		}
 	}
 }
@@ -190,10 +185,11 @@ void SetChainsaw(D3DXVECTOR2 pos)
 		{
 			g_Chainsaw[i].use = true;							// 使用状態へ変更する
 			g_Chainsaw[i].pos = pos;							// 座標をセット
-			g_Chainsaw[i].Anime = 0;							//アニメーションリセット
+		
 			g_Chainsaw[i].rot = 3.75f;							//回転位置を上になるように設定
 			g_Chainsaw[i].direction = GetPlayerDir();			//どっち方向に使用するのかを設定する
 			g_Chainsaw[i].Vector = D3DXVECTOR2(0.0f, 100.0f);
+			Moverot = 0.1f; 
 			return;												// 1発セットしたので終了する
 		}
 	}

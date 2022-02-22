@@ -10,3 +10,5 @@
 int HitStop(int now_time, int start_time, int finish_time, int rate_of_change);
 
 float HitStop_angle(float now_angle, float start_angle, float finish_angle, float rate_of_change);
+float Hitstop_test(float add_angle, float now_angle, float finish_angle, float rate_of_change);
+void SetFlag();
