@@ -52,8 +52,8 @@ HRESULT InitChainsaw(void)
 	{
 		g_Chainsaw[i].use = false;
 		g_Chainsaw[i].w = 100.0f;
-		g_Chainsaw[i].h = 100.0f;
-		g_Chainsaw[i].pos = D3DXVECTOR2(300, 300.0f);
+		g_Chainsaw[i].h = 50.0f;
+		g_Chainsaw[i].pos = D3DXVECTOR2(100, 50.0f);
 		g_Chainsaw[i].CollisionPos = D3DXVECTOR2(0.0f, 0.0f);
 		g_Chainsaw[i].CollisionSize = D3DXVECTOR2(100.0f, 50.0f);
 		g_Chainsaw[i].rot = 0.0f;
@@ -87,7 +87,15 @@ void UpdateChainsaw(void)
 		if (g_Chainsaw[i].use == true)	// このチェンソーが使われている？
 		{								// Yes
 			
-			g_Chainsaw[i].rot += Moverot[i];
+			if (g_Chainsaw[i].direction == Right)
+			{
+				g_Chainsaw[i].rot += Moverot[i];
+			}
+			
+			if (g_Chainsaw[i].direction == Left)
+			{
+				g_Chainsaw[i].rot -= Moverot[i];
+			}
 			
 			//playerの座標取得
 			D3DXVECTOR2 pPlayer_pos = GetPlayerPos();
@@ -139,13 +147,25 @@ void UpdateChainsaw(void)
 			}
 
 			//チェンソーの画像がある程度回転したらリセットするように設定
-			if (g_Chainsaw[i].rot >= 6.5f)
+			if (g_Chainsaw[i].direction == Right)
 			{
-				g_Chainsaw[i].use = false;
-				PlayerMoveReset();
-				SetFlag();
+				if (g_Chainsaw[i].rot >= 6.5f)
+				{
+					g_Chainsaw[i].use = false;
+					PlayerMoveReset();
+					SetFlag();
+				}
 			}
 			
+			if (g_Chainsaw[i].direction == Left)
+			{
+				if (g_Chainsaw[i].rot <= 3.0f)
+				{
+					g_Chainsaw[i].use = false;
+					PlayerMoveReset();
+					SetFlag();
+				}
+			}
 			
 		}
 	}
@@ -167,11 +187,13 @@ void DrawChainsaw(void)
 			float ph = g_Chainsaw[i].h;		// バレットの表示高さ
 			D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
-			// １枚のポリゴンの頂点とテクスチャ座標を設定
-			/*DrawSpriteColorRotate(g_Chainsaw[i].texNo, px, py, pw, ph, 0.0f, 0.0f, 1.0f, 1.0f, col, g_Chainsaw[i].rot);*/
+			
 
 			//あたり判定テクスチャー（後で消すかも）
 			DrawSpriteColorRotate(g_Chainsaw[i].CollisionTextNo, g_Chainsaw[i].CollisionPos.x, g_Chainsaw[i].CollisionPos.y, g_Chainsaw[i].CollisionSize.x, g_Chainsaw[i].CollisionSize.y, 0.0f, 0.0f, 1.0f, 1.0f, col, g_Chainsaw[i].rot);
+
+			// １枚のポリゴンの頂点とテクスチャ座標を設定
+			DrawSpriteColorRotate(g_Chainsaw[i].texNo, px, py, pw, ph, 0.0f, 0.0f, 1.0f, 1.0f, col, g_Chainsaw[i].rot);
 		}
 	}
 
@@ -199,9 +221,15 @@ void SetChainsaw(D3DXVECTOR2 pos)
 		{
 			g_Chainsaw[i].use = true;							// 使用状態へ変更する
 			g_Chainsaw[i].pos = pos;							// 座標をセット
-		
-			g_Chainsaw[i].rot = 3.75f;							//回転位置を上になるように設定
 			g_Chainsaw[i].direction = GetPlayerDir();			//どっち方向に使用するのかを設定する
+			if (g_Chainsaw[i].direction == Right)
+			{
+				g_Chainsaw[i].rot = 3.75f;							//回転位置を上になるように設定
+			}
+			if (g_Chainsaw[i].direction == Left)
+			{
+				g_Chainsaw[i].rot = 5.00f;							//回転位置を上になるように設定
+			}
 			g_Chainsaw[i].Vector = D3DXVECTOR2(0.0f, 100.0f);
 			Moverot[i] = 0.1f; 
 			return;												// 1発セットしたので終了する
