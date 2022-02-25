@@ -25,8 +25,8 @@ void ResetEnemy(void);
 //*****************************************************************************
 
 static ENEMY g_Enemy[ENEMY_MAX];							// エネミー構造体
-static int EnemyTexture_01 =0;
-static int EenmyTexture_02 =0;
+static int EnemyTexture_01 = 0;
+static int EenmyTexture_02 = 0;
 static int g_MapNumber = 0;
 static int g_OldMapNumber = -1;
 
@@ -42,20 +42,21 @@ HRESULT InitEnemy(void)
 	// エネミー構造体の初期化
 	for (int i = 0; i < ENEMY_MAX; i++)
 	{
-		g_Enemy[i].use   = false;
-		g_Enemy[i].w     = 100.0f;
-		g_Enemy[i].h     = 100.0f;
-		g_Enemy[i].pos   = D3DXVECTOR2(600.0f, 600.0f);
-		g_Enemy[i].rot   = 0.0f;
+		g_Enemy[i].use = false;
+		g_Enemy[i].w = 100.0f;
+		g_Enemy[i].h = 100.0f;
+		g_Enemy[i].pos = D3DXVECTOR2(600.0f, 600.0f);
+		g_Enemy[i].rot = 0.0f;
 		g_Enemy[i].texNo = EnemyTexture_01;
 		g_Enemy[i].state = 0;
 		g_Enemy[i].frame = 0;
 		g_Enemy[i].kind = 0;
 		g_Enemy[i].HP = 0;
+		g_Enemy[i].destroy = false;
 	}
 
 
-	
+
 	return S_OK;
 }
 
@@ -79,7 +80,7 @@ void UpdateEnemy(void)
 		{
 		case 0:
 			ResetEnemy();
-			SetEnemy(D3DXVECTOR2(600.0f, 400.0f),0);
+			SetEnemy(D3DXVECTOR2(600.0f, 400.0f), 0);
 			break;
 
 		case 1:
@@ -100,9 +101,10 @@ void UpdateEnemy(void)
 			if (g_Enemy[i].HP <= 0)
 			{
 				g_Enemy[i].use = false;
+				g_Enemy[i].destroy = true;
 			}
-									
-			
+
+
 
 			//フレームの追加
 			g_Enemy[i].frame++;
@@ -130,6 +132,26 @@ void DrawEnemy(void)
 			// １枚のポリゴンの頂点とテクスチャ座標を設定
 			DrawSpriteColorRotate(g_Enemy[i].texNo, px, py, pw, ph, 0.0f, 0.0f, 1.0f, 1.0f, col, g_Enemy[i].rot);
 		}
+
+		//オブジェクトが壊れたとき
+		if (!g_Enemy[i].use && g_Enemy[i].destroy)
+		{
+			float destroy_pos = (g_Enemy[i].w / 4) + 20.0f;
+			//左側
+			float px = g_Enemy[i].pos.x - destroy_pos;	// エネミーの表示位置X
+			float py = g_Enemy[i].pos.y;	// エネミーの表示位置Y
+			float pw = g_Enemy[i].w / 2;		// エネミーの表示幅
+			float ph = g_Enemy[i].h;		// エネミーの表示高さ
+			D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+			// １枚のポリゴンの頂点とテクスチャ座標を設定
+			DrawSpriteColorRotate(g_Enemy[i].texNo, px, py, pw, ph, 0.0f, 0.0f, 0.5f, 1.0f, col, g_Enemy[i].rot);
+
+			//右側
+			px = g_Enemy[i].pos.x + destroy_pos;	// エネミーの表示位置X
+
+			DrawSpriteColorRotate(g_Enemy[i].texNo, px, py, pw, ph, 0.5f, 0.0f, 0.5f, 1.0f, col, g_Enemy[i].rot);
+		}
 	}
 }
 
@@ -145,7 +167,7 @@ ENEMY *GetEnemy(void)
 //=============================================================================
 // 敵の発生処理
 //=============================================================================
-void SetEnemy(D3DXVECTOR2 pos,int EnemyKind)
+void SetEnemy(D3DXVECTOR2 pos, int EnemyKind)
 {
 	// もし未使用のデータを探す
 	for (int i = 0; i < ENEMY_MAX; i++)
@@ -157,7 +179,7 @@ void SetEnemy(D3DXVECTOR2 pos,int EnemyKind)
 			g_Enemy[i].rot = 0.0f;			// 回転角のリセット
 			g_Enemy[i].state = 0;			// 状態をリセット
 			g_Enemy[i].frame = 0;			// フレームのリセット
-			
+
 			switch (EnemyKind)
 			{
 			case 0:
@@ -175,6 +197,7 @@ void SetEnemy(D3DXVECTOR2 pos,int EnemyKind)
 			return;							// 敵をセットできたので終了する
 		}
 	}
+
 }
 
 
@@ -190,8 +213,7 @@ void ResetEnemy(void)
 		{
 			g_Enemy[i].use = false;			// 使用状態へ変更する
 
-			
-							
+
 		}
 	}
 	return;
