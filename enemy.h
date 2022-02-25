@@ -28,6 +28,8 @@ struct ENEMY
 
 	int						state;		// 状態
 	int						frame;		// フレーム
+
+	bool					destroy;	//ブロックがこわれているかどうか
 };
 
 
@@ -42,4 +44,3 @@ void DrawEnemy(void);
 ENEMY *GetEnemy(void);
 void SetEnemy(D3DXVECTOR2 pos, int EnemyKind);
 void DelEnemyHP(int EnemyNum);
-
