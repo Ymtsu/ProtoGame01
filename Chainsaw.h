@@ -29,7 +29,10 @@ struct CHAINSAW
 	int						CollisionTextNo;		// あたり判定テクスチャ―
 	int						Anime;					// アニメーション
 	D3DXVECTOR2				Vector;					//プレイヤーまでのベクトル
-						
+	float				    Moverot;				//回転加速度
+	bool					Preliminary;			//振り上げ準備期間
+	int						Charge;					//チャージタイム
+	int						OldCharge;
 
 };
 
