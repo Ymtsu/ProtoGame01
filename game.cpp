@@ -19,6 +19,7 @@
 #include "sound.h"
 #include "score.h"
 #include "bg.h"
+#include "room.h"
 
 /*------------------------------------------------------------------------------
    íËêîíËã`
@@ -50,6 +51,7 @@ void InitGame(void)
 	InitBullet();
 	InitScore();
 	InitBG();
+	InitRoom();
 
 	g_BGMNo = LoadSound("data/BGM/sample001.wav");
 
@@ -68,6 +70,7 @@ void UninitGame()
 	UninitBullet();
 	UninitEnemy();
 	UninitPlayer();
+	UninitRoom();
 }
 
 /*------------------------------------------------------------------------------
@@ -80,6 +83,7 @@ void UpdateGame(void)
 	UpdateEnemy();
 	UpdateBullet();
 	UpdateScore();
+	UpdateRoom();
 
 	UpdateEnemyEmitter();
 
@@ -106,5 +110,6 @@ void DrawGame(void)
 	DrawPlayer();
 
 	DrawScore();
+	DrawRoom();
 }
 

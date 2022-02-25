@@ -25,4 +25,4 @@ void DrawSpriteLeftTop(int texNo, float X, float Y, float Width, float Height, f
 void DrawSpriteColor(int texNo, float X, float Y, float Width, float Height, float U, float V, float UW, float VH, D3DXCOLOR color);
 void DrawSpriteColorRotate(int texNo, float X, float Y, float Width, float Height, float U, float V, float UW, float VH, D3DXCOLOR Color, float Rot);
 void DrawSpriteFreeVertex(int texNo, D3DXVECTOR3 vertex_left_top, D3DXVECTOR3 vertex_right_top, D3DXVECTOR3 vertex_left_down, D3DXVECTOR3 vertex_right_down, float U, float V, float UW, float VH);
-
+void DrawSpriteLeftTopColor(int texNo, float X, float Y, float Width, float Height, float U, float V, float UW, float VH, D3DXCOLOR color);
