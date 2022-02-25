@@ -128,11 +128,11 @@ void UpdateChainsaw(void)
 							switch (pEnemy[i].kind)
 							{
 							case 0:
-								Moverot[z] = Hitstop_test(Moverot[z], g_Chainsaw[z].rot, (g_Chainsaw[z].rot + 1.0f), 0.8f);
+								Moverot[z] = Hitstop_angle(Moverot[z], g_Chainsaw[z].rot, (g_Chainsaw[z].rot + 1.0f), 0.8f);
 								break;
 
 							case 1:
-								Moverot[z] = Hitstop_test(Moverot[z], g_Chainsaw[z].rot, (g_Chainsaw[z].rot + 1.0f), 0.5f);
+								Moverot[z] = Hitstop_angle(Moverot[z], g_Chainsaw[z].rot, (g_Chainsaw[z].rot + 1.0f), 0.5f);
 								break;
 
 							default:
