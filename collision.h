@@ -51,6 +51,7 @@ float CROSS_PRODUCT(D3DXVECTOR2 vector_A, D3DXVECTOR2 vector_B);
 //=============================================================================
 
 bool CollisionBB(D3DXVECTOR2 pos1, D3DXVECTOR2 pos2, D3DXVECTOR2 size1, D3DXVECTOR2 size2);
+bool CollisionBB_LEFT_TOP(D3DXVECTOR2 Left_Top, D3DXVECTOR2 pos2, D3DXVECTOR2 size1, D3DXVECTOR2 size2);
 bool CollisionCC(D3DXVECTOR2 pos1, D3DXVECTOR2 pos2, float size1, float size2);
 
 

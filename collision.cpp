@@ -110,6 +110,40 @@ bool CollisionBB(D3DXVECTOR2 pos1, D3DXVECTOR2 pos2, D3DXVECTOR2 size1, D3DXVECT
 }
 
 //=============================================================================
+// BBによる当たり判定処理(LeftTop)
+// 回転は考慮しない
+// 戻り値：当たってたらtrue
+//=============================================================================
+bool CollisionBB_LEFT_TOP(D3DXVECTOR2 Left_Top, D3DXVECTOR2 pos2, D3DXVECTOR2 size1, D3DXVECTOR2 size2)
+{
+	D3DXVECTOR2 min1, max1;
+	D3DXVECTOR2 min2, max2;
+
+	min1.x = Left_Top.x;
+	min1.y = Left_Top.y;
+	max1.x = Left_Top.x + size1.x;
+	max1.y = Left_Top.y + size1.y;
+
+	min2.x = pos2.x - size2.x / 2;
+	min2.y = pos2.y - size2.y / 2;
+	max2.x = pos2.x + size2.x / 2;
+	max2.y = pos2.y + size2.y / 2;
+
+	//X軸の判定
+	if (min1.x < max2.x && max1.x > min2.x)
+	{
+		//Y軸の判定
+		if (min1.y < max2.y && max1.y > min2.y)
+		{
+			//全ての条件がTRUEならヒット判定
+			return true;
+		}
+	}
+
+	return false;
+}
+
+//=============================================================================
 // 円と円の当たり判定処理
 // サイズは半径
 // 戻り値：当たってたらtrue
