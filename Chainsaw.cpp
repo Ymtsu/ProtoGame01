@@ -226,11 +226,11 @@ void UpdateChainsaw(void)
 							{
 							case 0:
 
-								g_Chainsaw[ChainsawNum].Moverot = Hitstop_angle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), 0.8f);
+								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), 0.8f);
 								break;
 
 							case 1:
-								g_Chainsaw[ChainsawNum].Moverot = Hitstop_angle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), 0.5f);
+								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), 0.5f);
 
 								break;
 
