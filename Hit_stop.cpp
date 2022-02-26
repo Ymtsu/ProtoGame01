@@ -36,12 +36,12 @@ float HitstopAngle(float add_angle, float now_angle, float finish_angle, float r
         g_frame++;
     }
 
-    if (g_frame >= 10 || g_flag)
+   /* if (g_frame >= 10 || g_flag)
     {
         result_add_angle = (add_angle - result_add_angle) + add_angle;
         g_frame = 0;
         g_flag = true;
-    }
+    }*/
 
     return result_add_angle;
 }

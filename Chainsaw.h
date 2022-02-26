@@ -36,7 +36,9 @@ struct CHAINSAW
 	int						CollisionTextNo;			// あたり判定テクスチャ―
 	int						ChageTextNo;				//チャージテキスチャー
 	int						CollisionAnimetionTextNo;	//当たった時のアニメーションテキスチャー
-	bool					Collision;
+	int					Collisionflg;
+	int						SE;
+	bool					SEUse;
 };
 
 

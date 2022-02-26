@@ -27,6 +27,8 @@ void ResetEnemy(void);
 static ENEMY g_Enemy[ENEMY_MAX];							// エネミー構造体
 static int EnemyTexture_01 = 0;
 static int EenmyTexture_02 = 0;
+static int EnenyTexture_03 = 0;
+static int EnemyTexture_04 = 0;
 static int g_MapNumber = 0;
 static int g_OldMapNumber = -1;
 
@@ -36,8 +38,10 @@ static int g_OldMapNumber = -1;
 //=============================================================================
 HRESULT InitEnemy(void)
 {
-	EnemyTexture_01 = LoadTexture("data/TEXTURE/enemy01.png");
-	EenmyTexture_02 = LoadTexture("data/TEXTURE/enemy02.png");
+	EnemyTexture_01 = LoadTexture("data/TEXTURE/058865.png");
+	EenmyTexture_02 = LoadTexture("data/TEXTURE/いわ.png");
+	EnenyTexture_03 = LoadTexture("data/TEXTURE/豆腐.png");
+	EnemyTexture_04 = LoadTexture("data/TEXTURE/鉱石.png");
 
 	// エネミー構造体の初期化
 	for (int i = 0; i < ENEMY_MAX; i++)
@@ -86,6 +90,25 @@ void UpdateEnemy(void)
 		case 1:
 			ResetEnemy();
 			SetEnemy(D3DXVECTOR2(400.0f, 400.0f), 1);
+			break;
+
+		case 2:
+			ResetEnemy();
+			SetEnemy(D3DXVECTOR2(400.0f, 400.0f), 2);
+			break;
+
+		case 3:
+			ResetEnemy();
+			SetEnemy(D3DXVECTOR2(400.0f, 400.0f), 3);
+			break;
+		case 4:
+			ResetEnemy();
+			SetEnemy(D3DXVECTOR2(400.0f, 400.0f), 4);
+			break;
+
+		case 5:
+			ResetEnemy();
+			SetEnemy(D3DXVECTOR2(400.0f, 400.0f), 5);
 			break;
 
 		default:
@@ -185,13 +208,38 @@ void SetEnemy(D3DXVECTOR2 pos, int EnemyKind)
 			case 0:
 				g_Enemy[i].HP = 5;
 				g_Enemy[i].kind = EnemyKind;
-				g_Enemy[i].texNo = EnemyTexture_01;
+				g_Enemy[i].texNo = EnenyTexture_03;
 				break;
 
 			case 1:
 				g_Enemy[i].HP = 10;
 				g_Enemy[i].kind = EnemyKind;
+				g_Enemy[i].texNo = EnenyTexture_03;
+				break;
+
+			case 2:
+				g_Enemy[i].HP = 10;
+				g_Enemy[i].kind = EnemyKind;
+				g_Enemy[i].texNo = EnemyTexture_01;
+				break;
+
+			case 3:
+				g_Enemy[i].HP = 20;
+				g_Enemy[i].kind = EnemyKind;
+				g_Enemy[i].texNo = EnemyTexture_01;
+				break;
+
+
+			case 4:
+				g_Enemy[i].HP = 30;
+				g_Enemy[i].kind = EnemyKind;
 				g_Enemy[i].texNo = EenmyTexture_02;
+				break;
+
+			case 5:
+				g_Enemy[i].HP = 30;
+				g_Enemy[i].kind = EnemyKind;
+				g_Enemy[i].texNo = EnemyTexture_04;
 				break;
 			}
 			return;							// 敵をセットできたので終了する

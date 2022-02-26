@@ -12,6 +12,7 @@
 #include "collision.h"
 #include "Hit_stop.h"
 #include "input.h"
+#include "sound.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -32,6 +33,7 @@ static CHAINSAW g_Chainsaw[CHAINSAW_MAX];							// チェンソー構造体
 
 static D3DXVECTOR2 g_Collisiona_Move = D3DXVECTOR2(0.0f, 0.0f);
 static int ChangeHit = 0;
+static float g_hard = 0.0f;
 
 
 //=============================================================================
@@ -47,6 +49,8 @@ HRESULT InitChainsaw(void)
 	int effectNo = LoadTexture("data/ANIMATION/チェーンソーエフェクト.png");
 	////チャージのアニメーション
 	//int chageNo = LoadTexture("data/ANIMATION/チェーンソーエフェクト.png");
+
+	int SENo = LoadSound("data/SE/ーで木を切る2.wav");
 
 	//あたり判定可視化の位置移動の初期化
 	g_Collisiona_Move.x = 75.0f / 20.0f;
@@ -71,7 +75,9 @@ HRESULT InitChainsaw(void)
 		g_Chainsaw[ChainsawNum].Charge = 0;
 		g_Chainsaw[ChainsawNum].OldCharge = 0;
 		g_Chainsaw[ChainsawNum].CollisionAnimetionTextNo = effectNo;
-		g_Chainsaw[ChainsawNum].Collision = false;
+		g_Chainsaw[ChainsawNum].Collisionflg = 0;
+		g_Chainsaw[ChainsawNum].SE = SENo;
+		g_Chainsaw[ChainsawNum].SEUse = false;
 	}
 
 	
@@ -96,6 +102,11 @@ void UpdateChainsaw(void)
 		if (g_Chainsaw[ChainsawNum].use == true)	// このチェンソーが使われている？
 		{								// Yes
 			
+			if (g_Chainsaw[ChainsawNum].SEUse == true)
+			{
+				PlaySound(g_Chainsaw[ChainsawNum].SE, -1);
+				g_Chainsaw[ChainsawNum].SEUse = false;
+			}
 			//OldChage更新
 			g_Chainsaw[ChainsawNum].OldCharge = g_Chainsaw[ChainsawNum].Charge;
 
@@ -230,27 +241,75 @@ void UpdateChainsaw(void)
 							switch (pEnemy[enemy].kind)
 							{
 							case 0:
-
-								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), 0.8f);
+								g_hard = 1.0f;
+								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
 								g_Chainsaw[ChainsawNum].Animetion += 1;
 								if (g_Chainsaw[ChainsawNum].Animetion > 30)
 								{
 									g_Chainsaw[ChainsawNum].Animetion = 0;
 								}
-								g_Chainsaw[ChainsawNum].Collision = true;
+								g_Chainsaw[ChainsawNum].Collisionflg = 1;
 								break;
 
 							case 1:
-								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), 0.5f);
+								g_hard = 0.8f;
+								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
 								g_Chainsaw[ChainsawNum].Animetion += 1;
 								if (g_Chainsaw[ChainsawNum].Animetion > 30)
 								{
 									g_Chainsaw[ChainsawNum].Animetion = 0;
 								}
-								g_Chainsaw[ChainsawNum].Collision = true;
+								g_Chainsaw[ChainsawNum].Collisionflg = 1;
 
 								break;
 
+							case 2:
+								g_hard = 0.6f;
+								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
+								g_Chainsaw[ChainsawNum].Animetion += 1;
+								if (g_Chainsaw[ChainsawNum].Animetion > 30)
+								{
+									g_Chainsaw[ChainsawNum].Animetion = 0;
+								}
+								g_Chainsaw[ChainsawNum].Collisionflg = 1;
+
+								break;
+
+							case 3:
+								g_hard = 0.4f;
+								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
+								g_Chainsaw[ChainsawNum].Animetion += 1;
+								if (g_Chainsaw[ChainsawNum].Animetion > 30)
+								{
+									g_Chainsaw[ChainsawNum].Animetion = 0;
+								}
+								g_Chainsaw[ChainsawNum].Collisionflg = 1;
+
+								break;
+
+							case 4:
+								g_hard = 0.005f;
+								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
+								g_Chainsaw[ChainsawNum].Animetion += 1;
+								if (g_Chainsaw[ChainsawNum].Animetion > 30)
+								{
+									g_Chainsaw[ChainsawNum].Animetion = 0;
+								}
+								g_Chainsaw[ChainsawNum].Collisionflg = 1;
+
+								break;
+
+							case 5:
+								g_hard = 0.001f;
+								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
+								g_Chainsaw[ChainsawNum].Animetion += 1;
+								if (g_Chainsaw[ChainsawNum].Animetion > 30)
+								{
+									g_Chainsaw[ChainsawNum].Animetion = 0;
+								}
+								g_Chainsaw[ChainsawNum].Collisionflg = 1;
+
+								break;
 							
 							default:
 								break;
@@ -260,12 +319,21 @@ void UpdateChainsaw(void)
 						}
 						else
 						{
-							g_Chainsaw[ChainsawNum].Collision = false;
+							if (g_Chainsaw[ChainsawNum].Collisionflg == 1)
+							{
+								g_Chainsaw[ChainsawNum].Collisionflg = 2;
+							}
+							
 						}
 					}
 				}
 			}
 
+
+			if (g_Chainsaw[ChainsawNum].Collisionflg == 2)
+			{
+				HitstopEndAcceleration(g_Chainsaw[ChainsawNum].rot, g_hard);
+			}
 			//チェンソーの画像がある程度回転したらリセットするように設定（右回転）
 			if (g_Chainsaw[ChainsawNum].direction == Right)
 			{
@@ -275,6 +343,7 @@ void UpdateChainsaw(void)
 					PlayerMoveReset();
 					SetFlag();
 					g_Chainsaw[ChainsawNum].StopCount = 0;
+					StopSound(g_Chainsaw[ChainsawNum].SE);
 				}
 			}
 
@@ -286,6 +355,7 @@ void UpdateChainsaw(void)
 					g_Chainsaw[ChainsawNum].use = false;
 					PlayerMoveReset();
 					SetFlag();
+					StopSound(g_Chainsaw[ChainsawNum].SE);
 				}
 			}
 			
@@ -329,11 +399,13 @@ void DrawChainsaw(void)
 			}
 
 
-			if (g_Chainsaw[ChainsawNum].Collision == true)
+			if (g_Chainsaw[ChainsawNum].Collisionflg == true)
 			{
 				D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-				int TextU =  (1.0f/ 6.0f) * (g_Chainsaw[ChainsawNum].Animetion % 6);
-				int TextV = (1.0f /5.0f) * (g_Chainsaw[ChainsawNum].Animetion / 6);
+
+				int	Animetion = (g_Chainsaw[ChainsawNum].Animetion / 2);
+				float TextU =  (1.0f/ 6.0f) * (Animetion % 6);
+				float TextV = (1.0f /5.0f) * (Animetion / 6);
 
 				DrawSpriteColorRotate(g_Chainsaw[ChainsawNum].CollisionAnimetionTextNo, px, py, 500.0f, 500.0f, TextU, TextV, (1.0f/6.0f), (1.0f/5.0f), col, g_Chainsaw[ChainsawNum].rot);
 			}
@@ -384,6 +456,7 @@ void SetChainsaw(D3DXVECTOR2 pos)
 			g_Chainsaw[ChainsawNum].OldCharge = 0;
 			g_Chainsaw[ChainsawNum].StopCount = 0;
 			g_Chainsaw[ChainsawNum].Animetion = 0;
+			g_Chainsaw[ChainsawNum].SEUse = true;
 			return;												// 1発セットしたので終了する
 		}
 	}

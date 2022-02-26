@@ -241,7 +241,7 @@ void UpdatePlayer(void)
 	//チェンソー使用
 	if (GetKeyboardTrigger(DIK_SPACE))
 	{
-		PlaySound(g_ShotSENo, 0);
+		/*PlaySound(g_ShotSENo, 0);*/
 
 		SetVolume(g_ShotSENo, 0.1f);
 
