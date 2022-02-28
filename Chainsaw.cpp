@@ -104,7 +104,7 @@ void UpdateChainsaw(void)
 			
 			if (g_Chainsaw[ChainsawNum].SEUse == true)
 			{
-				PlaySound(g_Chainsaw[ChainsawNum].SE, -1);
+				PlaySounds(g_Chainsaw[ChainsawNum].SE, -1);
 				g_Chainsaw[ChainsawNum].SEUse = false;
 			}
 			//OldChageXV

@@ -5,15 +5,6 @@
 static int g_frame;
 static bool g_flag = false;
 
-    if (start_time <= now_time && now_time <= finish_time)
-    {
-        return rate_of_change * (now_time - start_time) + start_time; 
-    }
-
-    return ((60 - rate_of_change * (finish_time - start_time) - start_time)
-        / (60 - finish_time)) * (now_time - finish_time) + (rate_of_change * (finish_time - start_time) + start_time);
-}
-
 //============================================================================================================================
 //ヒットストップ(ラジアン管理)
 // 引数：現在の角度,ヒットストップが始まる角度,ヒットストップが終わる角度,どのくらいの遅さになるかの変化率(0～1)
