@@ -399,7 +399,7 @@ void DrawChainsaw(void)
 			}
 
 
-			if (g_Chainsaw[ChainsawNum].Collisionflg == true)
+			if (g_Chainsaw[ChainsawNum].Collisionflg == 1)
 			{
 				D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 

@@ -118,6 +118,8 @@ void UpdatePlayer(void)
 		//	
 		//}
 
+		
+
 		if (GetKeyboardPress(DIK_A))
 		{
 			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x - 1.0f, g_Player.pos.y)) != 1)
@@ -239,7 +241,7 @@ void UpdatePlayer(void)
 	//}
 
 	//チェンソー使用
-	if (GetKeyboardTrigger(DIK_SPACE))
+	if (GetKeyboardTrigger(DIK_SPACE) || IsButtonTriggered(0, XINPUT_GAMEPAD_A))
 	{
 		/*PlaySound(g_ShotSENo, 0);*/
 
