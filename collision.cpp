@@ -698,6 +698,90 @@ SQUARE_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3
 }
 
 //=============================================================================
+//円とブロックの当たり判定
+//=============================================================================
+bool CollisionCB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_radius, D3DXVECTOR2 block_size)
+{
+	//ボールとブロックを結んだベクトル
+	D3DXVECTOR2 circle_block_vector = circle_pos - block_pos;
+	//ボールとブロックを結んだベクトルの長さ
+	float circle_block_vector_length = LENGTH(circle_block_vector);
+	//ボールの半径とブロックの中心点から頂点までの長さを足したやつの2乗
+	float radius_plus_size_length = LENGTH(D3DXVECTOR2(block_size.x + circle_radius, block_size.y + circle_radius));
+
+
+	//ボールの半径とブロックの中心点から頂点までの長さを足したやつの2乗より
+	//ボールとブロックを結んだベクトルの2乗の方が短かったら
+	if (radius_plus_size_length >= circle_block_vector_length)
+	{
+		//仮想領域の頂点座標
+		float virtual_area_min_x = block_pos.x - powf((block_size.x / 2) + circle_radius, 2.0f);
+		float virtual_area_min_y = block_pos.y - powf((block_size.y / 2) + circle_radius, 2.0f);
+		float virtual_area_max_x = block_pos.x + powf((block_size.x / 2) + circle_radius, 2.0f);
+		float virtual_area_max_y = block_pos.y + powf((block_size.y / 2) + circle_radius, 2.0f);
+		//ブロックの頂点座標
+		float block_min_x = block_pos.x - block_size.x / 2;
+		float block_min_y = block_pos.y - block_size.y / 2;
+		float block_max_x = block_pos.x + block_size.x / 2;
+		float block_max_y = block_pos.y + block_size.y / 2;
+
+		//縦長の仮想領域
+		if (block_min_x < circle_pos.x && circle_pos.x > block_max_x)
+		{
+			if (virtual_area_min_y < circle_pos.y && circle_pos.y > virtual_area_max_y)
+			{
+				return true;
+			}
+		}
+		//横長の仮想領域
+		if (virtual_area_min_x < circle_pos.x && circle_pos.x > virtual_area_max_x)
+		{
+			if (block_min_y < circle_pos.y && circle_pos.y > block_max_y)
+			{
+				return true;
+			}
+		}
+
+		//各頂点からボールまでの長さと円の半径を足したやつの2乗
+		//左上
+		float left_up_to_ball_length = LENGTH(D3DXVECTOR2(circle_pos.x - block_min_x, circle_pos.y - block_max_y));
+		//左下
+		float left_down_to_ball_length = LENGTH(D3DXVECTOR2(circle_pos.x - block_min_x, circle_pos.y - block_min_y));
+		//右上
+		float right_up_to_ball_length = LENGTH(D3DXVECTOR2(circle_pos.x - block_max_x, circle_pos.y - block_min_y));
+		//右下
+		float right_down_to_ball_length = LENGTH(D3DXVECTOR2(circle_pos.x - block_max_x, circle_pos.y - block_max_y));
+
+		//半径の2乗
+		float radius_square = powf(circle_radius, 2.0f);
+
+		// 各頂点からボールまでの長さと円の半径を足したやつの2乗と半径の2乗の比較
+		//左上
+		if (radius_square > left_up_to_ball_length)
+		{
+			return true;
+		}
+		//左下
+		if (radius_square > left_down_to_ball_length)
+		{
+			return true;
+		}
+		//右上
+		if (radius_square > right_up_to_ball_length)
+		{
+			return true;
+		}
+		//右下
+		if (radius_square > right_down_to_ball_length)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+//=============================================================================
 //円と回転しているブロックの当たり判定
 //=============================================================================
 bool CollisionCRB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_radius, D3DXVECTOR2 block_size, float block_rot)
@@ -902,4 +986,109 @@ bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_cent
 
 	//角度の合計が0以上ならtrue
 	return (fabs(result) >= 0.01f);
+}
+
+//=============================================================================
+//チェーンソーとブロックの当たり判定
+//=============================================================================
+bool CollisionChainsaw(D3DXVECTOR2 chainsaw_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 chainsaw_size, D3DXVECTOR2 block_size, float chainsaw_rot)
+{
+	if (LENGTH(chainsaw_pos - block_pos) > LENGTH(D3DXVECTOR2((chainsaw_size + block_size) / 2)))
+	{
+		return false;
+	}
+
+	D3DXVECTOR2 Chainsaw_min, Chainsaw_max;
+	D3DXVECTOR2 block_min, block_max;
+	float chainsaw_to_circle = (chainsaw_size.x - chainsaw_size.y) / 2;
+	float Chainsaw_circle = chainsaw_size.y / 2;
+
+	block_min.x = block_pos.x - block_size.x / 2;
+	block_min.y = block_pos.y - block_size.y / 2;
+	block_max.x = block_pos.x + block_size.x / 2;
+	block_max.y = block_pos.y + block_size.y / 2;
+
+	// チェーンソーの中心点から頂点に対する角度
+	float BaseAngle = atan2f(chainsaw_size.y / 2, chainsaw_to_circle);
+	//チェーンソーの 中心点から頂点に対する距離
+	float Radius = sqrtf(LENGTH(D3DXVECTOR2(chainsaw_to_circle, chainsaw_size.y / 2)));
+
+	//回転後の座標
+	float x = chainsaw_pos.x - cosf(BaseAngle - chainsaw_rot) * Radius;
+	float y = chainsaw_pos.y + sinf(BaseAngle - chainsaw_rot) * Radius;
+	Chainsaw_min = D3DXVECTOR2(x, y);
+	x = chainsaw_pos.x + cosf(BaseAngle + chainsaw_rot) * Radius;
+	y = chainsaw_pos.y + sinf(BaseAngle + chainsaw_rot) * Radius;
+	Chainsaw_max = D3DXVECTOR2(x, y);
+
+	//ブロックの上面とチェーンソーの判定
+	if (CollisionIntersection(Chainsaw_min, Chainsaw_max, D3DXVECTOR2(block_min.x, block_min.y), D3DXVECTOR2(block_max.x, block_min.y)))
+	{
+		return true;
+	}
+
+	if (Chainsaw_min < block_pos)
+	{
+		//ブロックの左面とチェーンソーの判定
+		if (CollisionIntersection(Chainsaw_min, Chainsaw_max, D3DXVECTOR2(block_min.x, block_min.y), D3DXVECTOR2(block_min.x, block_max.y)))
+		{
+			return true;
+		}
+
+		//チェーンソーの先っちょの円の座標
+		x = chainsaw_pos.x + cosf(BaseAngle - chainsaw_rot) * (chainsaw_to_circle);
+		y = chainsaw_pos.y + sinf(BaseAngle - chainsaw_rot) * (chainsaw_to_circle);
+		Chainsaw_max = D3DXVECTOR2(x, y);
+
+		//チェーンソーの先っちょとブロックの判定
+		if (CollisionCB(Chainsaw_max, block_pos, chainsaw_to_circle, block_size))
+		{
+			return true;
+		}
+	}
+	else
+	{
+		//ブロックの右面とチェーンソーの判定
+		if (CollisionIntersection(Chainsaw_min, Chainsaw_max, D3DXVECTOR2(block_max.x, block_min.y), D3DXVECTOR2(block_max.x, block_max.y)))
+		{
+			return true;
+		}
+
+		//チェーンソーの先っちょの円の座標
+		x = chainsaw_pos.x - cosf(BaseAngle - chainsaw_rot) * (chainsaw_to_circle);
+		y = chainsaw_pos.y + sinf(BaseAngle - chainsaw_rot) * (chainsaw_to_circle);
+		Chainsaw_min = D3DXVECTOR2(x, y);
+
+		//チェーンソーの先っちょとブロックの判定
+		if (CollisionCB(Chainsaw_min, block_pos, chainsaw_to_circle, block_size))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+//=============================================================================
+//線分と線分の当たり判定
+//=============================================================================
+bool CollisionIntersection(D3DXVECTOR2 A_start, D3DXVECTOR2 A_end, D3DXVECTOR2 B_start, D3DXVECTOR2 B_end)
+{
+	float cross = CROSS_PRODUCT(A_end - A_start, B_end - B_start);
+
+	//2つの線が平行な時
+	if (cross == 0.0f)
+	{
+		return false;
+	}
+
+	float S = CROSS_PRODUCT(B_start - A_start, B_end - B_start) / cross;
+	float T = CROSS_PRODUCT(A_end - A_start, A_start - B_start) / cross;
+
+	if (S < 0.0 || 1.0 < S || T < 0.0 || 1.0 < T) {
+		// 線分が交差していない
+		return false;
+	}
+
+	return true;
 }

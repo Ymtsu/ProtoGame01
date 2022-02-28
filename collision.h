@@ -69,6 +69,7 @@ D3DXVECTOR2 CollisionPIS_DOWN_POS(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D
 D3DXVECTOR2 CollisionPIS_RIGHT_POS(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 ball_old_pos, D3DXVECTOR2 ball_size, D3DXVECTOR2 block_size);
 D3DXVECTOR2 CollisionPIS_LEFT_POS(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 ball_old_pos, D3DXVECTOR2 ball_size, D3DXVECTOR2 block_size);
 
+bool CollisionCB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_radius, D3DXVECTOR2 block_size);
 bool CollisionCL(D3DXVECTOR2 circle_pos, D3DXVECTOR2 line_min_pos, D3DXVECTOR2 line_max_pos, float circle_radius);
 bool CollisionCRB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_radius, D3DXVECTOR2 block_size, float block_rot);
 
@@ -76,3 +77,5 @@ D3DXVECTOR2* SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, floa
 D3DXVECTOR2* SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, D3DXVECTOR2 player_size, float block_rot);
 
 bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_center_pos, int vertex_num);
+bool CollisionChainsaw(D3DXVECTOR2 chainsaw_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 chainsaw_size, D3DXVECTOR2 block_size, float chainsaw_rot);
+bool CollisionIntersection(D3DXVECTOR2 A_start, D3DXVECTOR2 A_end, D3DXVECTOR2 B_start, D3DXVECTOR2 B_end);
