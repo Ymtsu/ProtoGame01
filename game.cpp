@@ -19,6 +19,7 @@
 #include "sound.h"
 #include "score.h"
 #include "bg.h"
+#include "Chainsaw.h"
 
 /*------------------------------------------------------------------------------
    íËêîíËã`
@@ -46,8 +47,9 @@ void InitGame(void)
 {
 	InitPlayer();
 	InitEnemy();
-	InitEnemyEmitter();
+	/*InitEnemyEmitter();*/
 	InitBullet();
+	InitChainsaw();
 	InitScore();
 	InitBG();
 
@@ -68,6 +70,7 @@ void UninitGame()
 	UninitBullet();
 	UninitEnemy();
 	UninitPlayer();
+	UninitChainsaw();
 }
 
 /*------------------------------------------------------------------------------
@@ -79,9 +82,10 @@ void UpdateGame(void)
 	UpdatePlayer();
 	UpdateEnemy();
 	UpdateBullet();
+	UpdateChainsaw();
 	UpdateScore();
 
-	UpdateEnemyEmitter();
+	/*UpdateEnemyEmitter();*/
 
 	//UpdateCollision();
 
@@ -100,10 +104,12 @@ void UpdateGame(void)
 ------------------------------------------------------------------------------*/
 void DrawGame(void)
 {
-	DrawBG();
+	//DrawBG();
 	DrawBullet();
+	
 	DrawEnemy();
 	DrawPlayer();
+	DrawChainsaw();
 
 	DrawScore();
 }

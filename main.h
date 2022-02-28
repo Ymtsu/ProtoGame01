@@ -39,6 +39,7 @@
 #pragma comment (lib, "xinput.lib")
 #pragma comment (lib, "dxguid.lib")
 #pragma comment (lib, "dinput8.lib")
+#pragma comment (lib, "xinput.lib")
 
 
 //*****************************************************************************
@@ -47,6 +48,7 @@
 #define CLASS_NAME			"GameWindow"			// ウインドウのクラス名
 #define SCREEN_WIDTH	(960)				// ウインドウの幅
 #define SCREEN_HEIGHT	(540)				// ウインドウの高さ
+#define CLASS_NAME			"GameWindow"			// ウインドウのクラス名
 
 
 //*****************************************************************************
