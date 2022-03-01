@@ -9,7 +9,7 @@
 #include "main.h"
 #include "renderer.h"
 
-class OBJECT
+class Object
 {
 public:
 	virtual HRESULT Init(void) = 0;
@@ -20,7 +20,6 @@ public:
 protected:
 	D3DXVECTOR2 pos = {};			//座標
 	D3DXVECTOR2 size = {};			//大きさ
-	D3DXVECTOR2 vector = {};		//ベクトル
 	float rot = {};					//回転角度
 	float strength = {};			//強度
 	int hp = {};					//耐久値

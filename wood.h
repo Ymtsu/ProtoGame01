@@ -8,7 +8,7 @@
 
 #include "object.h"
 
-class Wood : public OBJECT
+class Wood : public Object
 {
 	HRESULT Init(void) override {};
 	void Uninit(void) override {};
