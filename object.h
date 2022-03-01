@@ -21,6 +21,9 @@ enum class STATE : const char
 class Object
 {
 public:
+	Object() {};
+	~Object() {};
+
 	virtual HRESULT Init(void) = 0;
 	virtual void Uninit(void) = 0;
 	virtual void Update(void) = 0;
@@ -63,5 +66,4 @@ void Object::Draw(void)
 		DrawSprite(Object::m_texture, Object::m_pos.x, Object::m_pos.y, Object::m_size.x, Object::m_size.y,0.0f, 0.0f, 1.0f, 1.0f);
 	}
 }
-
 
