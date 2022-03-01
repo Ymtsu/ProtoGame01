@@ -5,14 +5,13 @@
 //こば、トミー
 //=============================================================================
 #include "wood.h"
-#include "texture.h"
-#include "sprite.h"
-
 
 
 HRESULT Wood::Init()
 {
+	Wood::m_texture = LoadTexture("data/TEXTURE/058865.png");
 
+	return S_OK;
 }
 
 void Wood::Uninit()
@@ -25,10 +24,10 @@ void Wood::Update()
 
 }
 
-void Wood::Draw()
+void Wood::Draw() 
 {
-	if (Wood::use == true)
+	if (Wood::m_use == true)
 	{
-		DrawSprite(Wood::texture,Wood::pos.x, Wood::pos.y,Wood::size.x,Wood::size.y, 0.0f, 0.0f, 1.0f, 1.0f);
+		DrawSprite(Wood::m_texture,Wood::m_pos.x, Wood::m_pos.y,Wood::m_size.x,Wood::m_size.y, 0.0f, 0.0f, 1.0f, 1.0f);
 	}
 }
