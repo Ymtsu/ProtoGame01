@@ -158,6 +158,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="move.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="player.h" />
