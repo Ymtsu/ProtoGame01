@@ -41,7 +41,8 @@ public:
 	int GetHp() { return m_hp; }
 	void SetHp(int hp) { m_hp = hp; }
 
-	bool m_use() { return m_use; }
+	bool GetUse() { return m_use; }
+	void SetUse() { m_use = true; }
 
 protected:
 	D3DXVECTOR2 m_pos = {};			//ç¿ïW

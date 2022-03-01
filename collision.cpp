@@ -24,6 +24,8 @@
 //*****************************************************************************
 // グローバル変数
 //*****************************************************************************
+D3DXVECTOR2 Square_Vertex_Pos[4] = {};
+
 
 //=============================================================================
 // 当たり判定処理
@@ -797,8 +799,6 @@ bool CollisionCRB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_ra
 //=============================================================================
 D3DXVECTOR2* SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, float block_rot)
 {
-	D3DXVECTOR2 Square_Vertex_Pos[4] = {};
-
 	//縦、横の長さの半分
 	float half_width, half_height;
 	half_width = block_size.x / 2;
@@ -827,7 +827,7 @@ D3DXVECTOR2* SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, floa
 	Square_Vertex_Pos[3] = D3DXVECTOR2(x, y);
 
 
-	return &Square_Vertex_Pos[0];
+	return Square_Vertex_Pos;
 }
 
 //=============================================================================
@@ -835,8 +835,6 @@ D3DXVECTOR2* SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, floa
 //=============================================================================
 D3DXVECTOR2* SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, D3DXVECTOR2 player_size, float block_rot)
 {
-	D3DXVECTOR2 Square_Vertex_Pos[4] = {};
-
 	//縦、横の長さの半分
 	float half_width, half_height;
 	half_width = (player_size.x + block_size.x) / 2;
@@ -865,7 +863,7 @@ D3DXVECTOR2* SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_
 	Square_Vertex_Pos[3] = D3DXVECTOR2(x, y);
 
 
-	return &Square_Vertex_Pos[0];
+	return Square_Vertex_Pos;
 }
 
 //=============================================================================
