@@ -827,7 +827,7 @@ D3DXVECTOR2* SquareVertexPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_size, floa
 	Square_Vertex_Pos[3] = D3DXVECTOR2(x, y);
 
 
-	return Square_Vertex_Pos;
+	return &Square_Vertex_Pos[0];
 }
 
 //=============================================================================
@@ -865,7 +865,7 @@ D3DXVECTOR2* SquareVertexPlusPlayerPos(D3DXVECTOR2 block_pos, D3DXVECTOR2 block_
 	Square_Vertex_Pos[3] = D3DXVECTOR2(x, y);
 
 
-	return Square_Vertex_Pos;
+	return &Square_Vertex_Pos[0];
 }
 
 //=============================================================================

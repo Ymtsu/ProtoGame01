@@ -19,6 +19,7 @@
 #include "sound.h"
 #include "score.h"
 #include "bg.h"
+#include "cut_down.h"
 
 /*------------------------------------------------------------------------------
    íËêîíËã`
@@ -46,6 +47,7 @@ void InitGame(void)
 {
 	InitPlayer();
 	InitEnemy();
+	InitCutDownObject();
 	InitEnemyEmitter();
 	InitBullet();
 	InitScore();
@@ -67,6 +69,7 @@ void UninitGame()
 	UninitScore();
 	UninitBullet();
 	UninitEnemy();
+	UninitCutDownObject();
 	UninitPlayer();
 }
 
@@ -78,6 +81,7 @@ void UpdateGame(void)
 	UpdateBG();
 	UpdatePlayer();
 	UpdateEnemy();
+	UpdateCutDownObject();
 	UpdateBullet();
 	UpdateScore();
 
@@ -103,6 +107,7 @@ void DrawGame(void)
 	DrawBG();
 	DrawBullet();
 	DrawEnemy();
+	DrawCutDownObject();
 	DrawPlayer();
 
 	DrawScore();
