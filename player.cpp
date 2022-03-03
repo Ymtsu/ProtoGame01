@@ -67,8 +67,7 @@ HRESULT InitPlayer(void)
 	g_Player.pos.y = 350.0f;
 	g_Player.oldpos = D3DXVECTOR2(0.0f, 0.0f);
 	g_Player.vector = D3DXVECTOR2(5.0f, 3.0f);
-	g_Player.w = 100.0f;
-	g_Player.h = 100.0f;
+	g_Player.size = D3DXVECTOR2(100.0f, 100.0f);
 	g_Player.use = true;
 	g_Player.dirction = Right;
 
@@ -171,7 +170,7 @@ void UpdatePlayer(void)
 	}
 
 	//地面判定（現在はCollisionBB使用）
-	if (CollisionBB(g_Player.pos, D3DXVECTOR2((SCREEN_WIDTH / 2), 480.0f), D3DXVECTOR2((g_Player.w), (g_Player.h)), D3DXVECTOR2((SCREEN_WIDTH + 160.0f), 160.0f)) == true)
+	if (CollisionBB(g_Player.pos, D3DXVECTOR2((SCREEN_WIDTH / 2), 480.0f), D3DXVECTOR2((g_Player.size.x), (g_Player.size.y)), D3DXVECTOR2((SCREEN_WIDTH + 160.0f), 160.0f)) == true)
 	{
 		g_JumpUse = false;
 		g_Player.vector.y = 5.0f;
@@ -220,9 +219,9 @@ void UpdatePlayer(void)
 	{
 		if (pEnemy[i].use == true)
 		{
-			if (CollisionBB(g_Player.pos,pEnemy[i].pos, D3DXVECTOR2((g_Player.w), (g_Player.h)), D3DXVECTOR2((pEnemy[i].w), (pEnemy[i].h)))) {
-				g_Player.w -= 1.0f;
-				g_Player.h -= 1.0f;
+			if (CollisionBB(g_Player.pos,pEnemy[i].pos, D3DXVECTOR2((g_Player.size.x), (g_Player.size.y)), D3DXVECTOR2((pEnemy[i].w), (pEnemy[i].h)))) {
+				g_Player.size.x -= 1.0f;
+				g_Player.size.y -= 1.0f;
 			}
 		}
 	}
@@ -269,7 +268,7 @@ void UpdatePlayer(void)
 void DrawPlayer(void)
 {
 	
-	DrawSprite(g_Player.texNo, g_Player.pos.x, g_Player.pos.y, g_Player.w, g_Player.h, g_AnimePtn * 0.33333f, g_CharaUV, 0.3333f, 0.25f);
+	DrawSprite(g_Player.texNo, g_Player.pos.x, g_Player.pos.y, g_Player.size.x, g_Player.size.y, g_AnimePtn * 0.33333f, g_CharaUV, 0.3333f, 0.25f);
 }
 
 //=============================================================================

@@ -32,7 +32,7 @@ typedef enum  DIRCTION {
 struct PLAYER
 {
 	bool					use;					// true:使っている  false:未使用
-	float					w, h;					// 幅と高さ
+	D3DXVECTOR2				size;					// 大きさ
 	D3DXVECTOR2				pos;					// ポリゴンの座標
 	D3DXVECTOR2				oldpos;					// ポリゴンの座標
 	D3DXVECTOR2				vector;					// 移動
