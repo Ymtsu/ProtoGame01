@@ -1,11 +1,11 @@
 #include "main.h"
 #include "Physics.h"
 
-#define GRAVITATIONAL_ACCELERATION (0.098f)//重力加速度
+#define GRAVITATIONAL_ACCELERATION (0.098f * 2)//重力加速度。弱かったので倍に
 
 float Gravity(float y_vector)
 {
-	float add_gravity_vector = y_vector - GRAVITATIONAL_ACCELERATION * 2;
+	float add_gravity_vector = y_vector - GRAVITATIONAL_ACCELERATION;
 
 	return add_gravity_vector;
 }
@@ -34,6 +34,12 @@ D3DXVECTOR2 SingleBounce(float Coefficient_restitution, D3DXVECTOR2 vector)
 	return bounce_vector;
 }
 
+float Pulley(int weight, int quantity, int power)
+{
+	float lifting_height = 0.0f;
+	lifting_height = power - (weight / quantity);
 
+	return lifting_height;
+}
 
 
