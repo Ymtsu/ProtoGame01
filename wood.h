@@ -38,3 +38,8 @@ class WoodCutRight : public Object
 	void Update(void) override;
 	void Draw(void) override;
 };
+
+class WoodMove : public Object 
+{
+
+};

@@ -51,6 +51,10 @@ void Wood::Draw()
 	{
 		DrawSprite(Wood::m_texture,Wood::m_pos.x, Wood::m_pos.y,Wood::m_size.x,Wood::m_size.y, 0.0f, 0.0f, 1.0f, 1.0f);
 	}
+
+	if(Wood::m_use == false)
+	DrawSpriteColorRotate(Wood::m_texture, Wood::m_pos.x, Wood::m_pos.y, Wood::m_size.x, Wood::m_size.y, 0.0f, 0.0f, 1.0f, 1.0f,
+		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), Wood::m_rot);
 }
 
 //=============================================================================
@@ -76,3 +80,31 @@ float CutRightRot(float rot)
 //=============================================================================
 // 切った樹木を動かす
 //=============================================================================
+//左から切られて右に倒れるとき
+D3DXVECTOR2 WoodRightMove(D3DXVECTOR2 wood_move_pos,D3DXVECTOR2 stump_pos,D3DXVECTOR2 stump_size, float rot)
+{
+	//切り株の右上の座標(回転の軸となる点)
+	D3DXVECTOR2 centerpoint = D3DXVECTOR2(stump_pos.x + stump_size.x / 2, stump_pos.y - stump_size.y / 2);
+
+	//軸と動く点の長さ
+	float move_length = sqrtf(LENGTH(centerpoint - wood_move_pos));
+
+	wood_move_pos.x += move_length * cosf(rot);
+	wood_move_pos.y -= move_length * sinf(rot);
+
+	return wood_move_pos;
+}
+//右から切られて左に倒れるとき
+D3DXVECTOR2 WoodLeftMove(D3DXVECTOR2 wood_move_pos, D3DXVECTOR2 stump_pos, D3DXVECTOR2 stump_size, float rot)
+{
+	//切り株の左上の座標(回転の軸となる点)
+	D3DXVECTOR2 centerpoint = D3DXVECTOR2(stump_pos.x - stump_size.x / 2, stump_pos.y - stump_size.y / 2);
+
+	//軸と動く点の長さ
+	float move_length = sqrtf(LENGTH(centerpoint - wood_move_pos));
+
+	wood_move_pos.x -= move_length * cosf(rot);
+	wood_move_pos.y -= move_length * sinf(rot);
+
+	return wood_move_pos;
+}
