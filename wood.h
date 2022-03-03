@@ -30,6 +30,6 @@ private:
 	D3DXVECTOR2 m_stump_pos = {};
 	D3DXVECTOR2 m_stump_size = {};
 	D3DXVECTOR2 m_vertex[4] = {};
-	WoodState m_wood_state = WoodState::no_exit;
+	WoodState m_state = WoodState::no_exit;
 };
 

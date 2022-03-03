@@ -25,7 +25,7 @@ HRESULT Wood::Init()
 	Wood::m_stump_texture = LoadTexture("data/TEXTURE/058865.png");
 	Wood::m_stump_pos = D3DXVECTOR2(Wood::m_pos.x/2, Wood::m_pos.y / 2);
 	Wood::m_stump_size = D3DXVECTOR2(100.0f, 600.0f);
-	Wood::m_wood_state = WoodState::stand;
+	Wood::m_state = WoodState::stand;
 	return S_OK;
 }
 
@@ -76,7 +76,7 @@ void Wood::Update()
 	}
 
 
-	switch (Wood::m_wood_state)
+	switch (Wood::m_state)
 	{
 	case WoodState::no_exit:
 		break;
@@ -90,14 +90,14 @@ void Wood::Update()
 			if (Wood::m_hp <= 0)
 			{
 				Wood::m_surface = SURFACE::left;
-				Wood::m_wood_state = WoodState::rotation;
+				Wood::m_state = WoodState::rotation;
 			}
 			break;
 		case SURFACE::right:
 			if (Wood::m_hp <= 0)
 			{
 				Wood::m_surface = SURFACE::right;
-				Wood::m_wood_state = WoodState::rotation;
+				Wood::m_state = WoodState::rotation;
 			}
 			break;
 		}
@@ -118,13 +118,37 @@ void Wood::Update()
 		//ブロックの頂点座標を代入
 		static D3DXVECTOR2* p_block_vertex = SquareVertexPos(Wood::m_pos, Wood::m_size, Wood::m_rot);
 		
+		if (Wood::m_rot > PI / 2)
+		{
+			Wood::m_state = WoodState::fallen;
+			break;
+		}
+
 		for (int i = 0; i < 4; i++)
 		{
 			Wood::m_vertex[i] = p_block_vertex[i];
 		}
+
 		break;
 
 	case WoodState::fallen:
+
+		//プレイヤーとの判定
+		switch (CollisionBB_SURFACE(p_Player->pos, Wood::m_pos, p_Player->old_pos, Wood::m_pos,
+			D3DXVECTOR2(p_Player->w, p_Player->h), D3DXVECTOR2(Wood::m_size.y, Wood::m_size.x)))
+		{
+		case SURFACE::min_error:
+			break;
+		case SURFACE::left:
+			p_Player->pos.x = Wood::m_pos.x - (Wood::m_size.y + p_Player->w) / 2;
+			break;
+		case SURFACE::right:
+			p_Player->pos.x = Wood::m_pos.x + (Wood::m_size.y + p_Player->w) / 2;
+			break;
+		case SURFACE::up:
+			p_Player->pos.y = Wood::m_pos.y + (Wood::m_size.x + p_Player->h) / 2;
+			break;
+		}
 		break;
 	}
 }
