@@ -64,8 +64,9 @@ HRESULT InitPlayer(void)
 
 	//初期化
 	g_Player.pos.x = SCREEN_WIDTH / 2;
-	g_Player.pos.y = 370;
+	g_Player.pos.y = 350.0f;
 	g_Player.oldpos = D3DXVECTOR2(0.0f, 0.0f);
+	g_Player.vector = D3DXVECTOR2(5.0f, 3.0f);
 	g_Player.w = 100.0f;
 	g_Player.h = 100.0f;
 	g_Player.use = true;
@@ -124,7 +125,7 @@ void UpdatePlayer(void)
 		if (GetKeyboardPress(DIK_A) || PAD < 0)
 		{
 			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x - 1.0f, g_Player.pos.y)) != 1)
-				g_Player.pos.x -= 3.0f;
+				g_Player.pos.x -= g_Player.vector.x;
 
 			g_Player.dirction = Left;
 			
@@ -133,7 +134,7 @@ void UpdatePlayer(void)
 		if (GetKeyboardPress(DIK_D) || PAD > 0)
 		{
 			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x + 1.0f, g_Player.pos.y)) != 1)
-				g_Player.pos.x += 3.0f;
+				g_Player.pos.x += g_Player.vector.x;
 
 			g_Player.dirction = Right;
 			
@@ -166,25 +167,16 @@ void UpdatePlayer(void)
 	//ジャンプフラグ使用時
 	if (g_JumpUse == true)
 	{
-		g_Player.pos.y -= 3.0f;
-		if (g_Player.pos.y <= 320.0f)
-		{
-			g_JumpUse = false;
-		}
-
-	}
-
-	//重力フラグ使用時
-	if (g_GravityUse == true)
-	{
-		g_Player.pos.y += g_Gravity;
+		g_Player.pos.y -= g_Player.vector.y;
 	}
 
 	//地面判定（現在はCollisionBB使用）
 	if (CollisionBB(g_Player.pos, D3DXVECTOR2((SCREEN_WIDTH / 2), 480.0f), D3DXVECTOR2((g_Player.w), (g_Player.h)), D3DXVECTOR2((SCREEN_WIDTH + 160.0f), 160.0f)) == true)
 	{
-		g_GravityUse = false;
-		g_Gravity = 0.0f;
+		g_JumpUse = false;
+		g_Player.vector.y = 5.0f;
+		/*g_GravityUse = false;
+		g_Gravity = 0.0f;*/
 	}
 	else
 	{
@@ -192,6 +184,11 @@ void UpdatePlayer(void)
 		g_GravityUse = true;
 	}
 
+	//重力フラグ使用時
+	if (g_GravityUse == true)
+	{
+		g_Player.vector.y = Gravity(g_Player.vector.y);
+	}
 
 	//次マップへ切り替える
 	if (g_Player.pos.x > SCREEN_WIDTH)

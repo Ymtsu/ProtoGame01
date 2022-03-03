@@ -55,6 +55,7 @@ HRESULT InitEnemy(void)
 		g_Enemy[i].state = 0;
 		g_Enemy[i].frame = 0;
 		g_Enemy[i].kind = 0;
+		g_Enemy[i].hard = 0.0f;
 		g_Enemy[i].HP = 0;
 		g_Enemy[i].destroy = false;
 	}
@@ -209,24 +210,28 @@ void SetEnemy(D3DXVECTOR2 pos, int EnemyKind)
 				g_Enemy[i].HP = 5;
 				g_Enemy[i].kind = EnemyKind;
 				g_Enemy[i].texNo = EnenyTexture_03;
+				g_Enemy[i].hard = 1.0f;
 				break;
 
 			case 1:
 				g_Enemy[i].HP = 10;
 				g_Enemy[i].kind = EnemyKind;
 				g_Enemy[i].texNo = EnenyTexture_03;
+				g_Enemy[i].hard = 0.8f;
 				break;
 
 			case 2:
 				g_Enemy[i].HP = 10;
 				g_Enemy[i].kind = EnemyKind;
 				g_Enemy[i].texNo = EnemyTexture_01;
+				g_Enemy[i].hard = 0.6f;
 				break;
 
 			case 3:
 				g_Enemy[i].HP = 20;
 				g_Enemy[i].kind = EnemyKind;
 				g_Enemy[i].texNo = EnemyTexture_01;
+				g_Enemy[i].hard = 0.4f;
 				break;
 
 
@@ -234,12 +239,14 @@ void SetEnemy(D3DXVECTOR2 pos, int EnemyKind)
 				g_Enemy[i].HP = 30;
 				g_Enemy[i].kind = EnemyKind;
 				g_Enemy[i].texNo = EenmyTexture_02;
+				g_Enemy[i].hard = 0.005f;
 				break;
 
 			case 5:
 				g_Enemy[i].HP = 30;
 				g_Enemy[i].kind = EnemyKind;
 				g_Enemy[i].texNo = EnemyTexture_04;
+				g_Enemy[i].hard = 0.001f;
 				break;
 			}
 			return;							// 敵をセットできたので終了する
@@ -275,4 +282,9 @@ void DelEnemyHP(int EnemyNum)
 	// もし未使用のデータを探す
 	g_Enemy[EnemyNum].HP -= 1;
 	return;
+}
+
+float GetEnemyHard(int index)
+{
+	return g_Enemy[index].hard;
 }

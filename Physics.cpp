@@ -5,7 +5,7 @@
 
 float Gravity(float y_vector)
 {
-	float add_gravity_vector = y_vector + GRAVITATIONAL_ACCELERATION;
+	float add_gravity_vector = y_vector - GRAVITATIONAL_ACCELERATION * 2;
 
 	return add_gravity_vector;
 }

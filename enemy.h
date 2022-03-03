@@ -25,6 +25,7 @@ struct ENEMY
 
 	int						HP;			//エネミーHP
 	int						kind;		//エネミーの種類
+	float					hard;		//硬さ
 
 	int						state;		// 状態
 	int						frame;		// フレーム
@@ -44,3 +45,4 @@ void DrawEnemy(void);
 ENEMY *GetEnemy(void);
 void SetEnemy(D3DXVECTOR2 pos, int EnemyKind);
 void DelEnemyHP(int EnemyNum);
+float GetEnemyHard(int index);

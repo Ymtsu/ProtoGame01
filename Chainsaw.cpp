@@ -241,7 +241,7 @@ void UpdateChainsaw(void)
 							switch (pEnemy[enemy].kind)
 							{
 							case 0:
-								g_hard = 1.0f;
+								g_hard = GetEnemyHard(enemy);
 								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
 								g_Chainsaw[ChainsawNum].Animetion += 1;
 								if (g_Chainsaw[ChainsawNum].Animetion > 30)
@@ -252,7 +252,7 @@ void UpdateChainsaw(void)
 								break;
 
 							case 1:
-								g_hard = 0.8f;
+								g_hard = GetEnemyHard(enemy);
 								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
 								g_Chainsaw[ChainsawNum].Animetion += 1;
 								if (g_Chainsaw[ChainsawNum].Animetion > 30)
@@ -264,7 +264,7 @@ void UpdateChainsaw(void)
 								break;
 
 							case 2:
-								g_hard = 0.6f;
+								g_hard = GetEnemyHard(enemy);
 								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
 								g_Chainsaw[ChainsawNum].Animetion += 1;
 								if (g_Chainsaw[ChainsawNum].Animetion > 30)
@@ -276,7 +276,7 @@ void UpdateChainsaw(void)
 								break;
 
 							case 3:
-								g_hard = 0.4f;
+								g_hard = GetEnemyHard(enemy);
 								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
 								g_Chainsaw[ChainsawNum].Animetion += 1;
 								if (g_Chainsaw[ChainsawNum].Animetion > 30)
@@ -288,7 +288,7 @@ void UpdateChainsaw(void)
 								break;
 
 							case 4:
-								g_hard = 0.005f;
+								g_hard = GetEnemyHard(enemy);
 								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
 								g_Chainsaw[ChainsawNum].Animetion += 1;
 								if (g_Chainsaw[ChainsawNum].Animetion > 30)
@@ -300,7 +300,7 @@ void UpdateChainsaw(void)
 								break;
 
 							case 5:
-								g_hard = 0.001f;
+								g_hard = GetEnemyHard(enemy);
 								g_Chainsaw[ChainsawNum].Moverot = HitstopAngle(g_Chainsaw[ChainsawNum].Moverot, g_Chainsaw[ChainsawNum].rot, (g_Chainsaw[ChainsawNum].rot + 1.0f), g_hard);
 								g_Chainsaw[ChainsawNum].Animetion += 1;
 								if (g_Chainsaw[ChainsawNum].Animetion > 30)
