@@ -86,7 +86,7 @@ void UpdateEnemyEmitter(void)
 	//敵の発生タイミングの制御
 	if (g_StageFrame >= g_EnemyEmitData[g_EnemyEmitCount].frame)
 	{
-		SetEnemy(g_EnemyEmitData[g_EnemyEmitCount].pos,1);
+		SetEnemy(g_EnemyEmitData[g_EnemyEmitCount].pos,3);
 		g_EnemyEmitCount++;
 	}
 
