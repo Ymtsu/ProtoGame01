@@ -74,6 +74,7 @@ float CROSS_PRODUCT(D3DXVECTOR2 vector_A, D3DXVECTOR2 vector_B)
 
 	return(Cross_Product);
 }
+
 //=============================================================================
 
 
@@ -183,7 +184,7 @@ bool CollisionCL(D3DXVECTOR2 circle_pos, D3DXVECTOR2 line_min_pos, D3DXVECTOR2 l
 //ブロックから見た衝突した面を返す
 // 引数のold_posはブロックが動かなければposでOK
 //=============================================================================
-SQUARE_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
+SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
 	D3DXVECTOR2 block_old_pos, D3DXVECTOR2 player_size, D3DXVECTOR2 block_size)
 {
 
@@ -223,22 +224,22 @@ SQUARE_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos
 			//プレイヤーがブロックの上から当たったとき
 			if (vertual_player_old_max.y <= block_min.y && vertual_player_old_max.x > block_min.x && vertual_player_old_min.x < block_max.x)
 			{
-				return SQUARE_SURFACE::up;
+				return SURFACE::up;
 			}
 			//プレイヤーがブロックの下から当たったとき
 			if (vertual_player_old_min.y >= block_max.y && vertual_player_old_max.x > block_min.x && vertual_player_old_min.x < block_max.x)
 			{
-				return SQUARE_SURFACE::down;
+				return SURFACE::down;
 			}
 			//プレイヤーがブロックの左から当たったとき
 			if (vertual_player_old_max.x <= block_min.x && vertual_player_old_max.y > block_min.y && vertual_player_old_min.y < block_max.y)
 			{
-				return SQUARE_SURFACE::left;
+				return SURFACE::left;
 			}
 			//プレイヤーがブロックの右から当たったとき
 			if (vertual_player_old_min.x >= block_max.x && vertual_player_old_max.y > block_min.y && vertual_player_old_min.y < block_max.y)
 			{
-				return SQUARE_SURFACE::right;
+				return SURFACE::right;
 			}
 
 			//プレイヤーの加速度の仮想角度
@@ -260,12 +261,12 @@ SQUARE_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos
 				if (vertual_velocity_angle > LeftDown_angle)
 				{
 					//上
-					return SQUARE_SURFACE::up;
+					return SURFACE::up;
 				}
 				else
 				{
 					//右
-					return SQUARE_SURFACE::right;
+					return SURFACE::right;
 				}
 			}
 
@@ -275,12 +276,12 @@ SQUARE_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos
 				if (vertual_velocity_angle > LeftUp_angle)
 				{
 					//右
-					return SQUARE_SURFACE::right;
+					return SURFACE::right;
 				}
 				else
 				{
 					//下
-					return SQUARE_SURFACE::down;
+					return SURFACE::down;
 				}
 			}
 
@@ -290,12 +291,12 @@ SQUARE_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos
 				if (vertual_velocity_angle > RightDown_angle)
 				{
 					//左
-					return SQUARE_SURFACE::left;
+					return SURFACE::left;
 				}
 				else
 				{
 					//上
-					return SQUARE_SURFACE::up;
+					return SURFACE::up;
 				}
 			}
 
@@ -305,17 +306,17 @@ SQUARE_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos
 				if (vertual_velocity_angle > RightUp_angle)
 				{
 					//下
-					return SQUARE_SURFACE::down;
+					return SURFACE::down;
 				}
 				else
 				{
 					//左
-					return SQUARE_SURFACE::left;
+					return SURFACE::left;
 				}
 			}
 		}
 	}
-	return SQUARE_SURFACE::no_hit;
+	return SURFACE::no_hit;
 
 }
 
@@ -571,7 +572,7 @@ D3DXVECTOR2 CollisionPIS_LEFT_POS(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D
 //=============================================================================
 //ブロックのどの面に当たるかを予測する＊全部のブロックと判定するので要改善
 //=============================================================================
-SQUARE_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
+SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
 	D3DXVECTOR2 block_old_pos, D3DXVECTOR2 player_size, D3DXVECTOR2 block_size)
 {
 
@@ -603,22 +604,22 @@ SQUARE_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3
 	//プレイヤーがブロックの上から当たったとき
 	if (vertual_player_old_max.y <= block_min.y && vertual_player_old_max.x > block_min.x && vertual_player_old_min.x < block_max.x)
 	{
-		return SQUARE_SURFACE::up;
+		return SURFACE::up;
 	}
 	//プレイヤーがブロックの下から当たったとき
 	if (vertual_player_old_min.y >= block_max.y && vertual_player_old_max.x > block_min.x && vertual_player_old_min.x < block_max.x)
 	{
-		return SQUARE_SURFACE::down;
+		return SURFACE::down;
 	}
 	//プレイヤーがブロックの左から当たったとき
 	if (vertual_player_old_max.x <= block_min.x && vertual_player_old_max.y > block_min.y && vertual_player_old_min.y < block_max.y)
 	{
-		return SQUARE_SURFACE::left;
+		return SURFACE::left;
 	}
 	//プレイヤーがブロックの右から当たったとき
 	if (vertual_player_old_min.x >= block_max.x && vertual_player_old_max.y > block_min.y && vertual_player_old_min.y < block_max.y)
 	{
-		return SQUARE_SURFACE::right;
+		return SURFACE::right;
 	}
 
 	//プレイヤーの加速度の仮想角度
@@ -640,12 +641,12 @@ SQUARE_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3
 		if (vertual_velocity_angle > LeftDown_angle)
 		{
 			//上
-			return SQUARE_SURFACE::up;
+			return SURFACE::up;
 		}
 		else
 		{
 			//右
-			return SQUARE_SURFACE::right;
+			return SURFACE::right;
 		}
 	}
 
@@ -655,12 +656,12 @@ SQUARE_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3
 		if (vertual_velocity_angle > LeftUp_angle)
 		{
 			//右
-			return SQUARE_SURFACE::right;
+			return SURFACE::right;
 		}
 		else
 		{
 			//下
-			return SQUARE_SURFACE::down;
+			return SURFACE::down;
 		}
 	}
 
@@ -670,12 +671,12 @@ SQUARE_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3
 		if (vertual_velocity_angle > RightDown_angle)
 		{
 			//左
-			return SQUARE_SURFACE::left;
+			return SURFACE::left;
 		}
 		else
 		{
 			//上
-			return SQUARE_SURFACE::up;
+			return SURFACE::up;
 		}
 	}
 
@@ -685,16 +686,16 @@ SQUARE_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3
 		if (vertual_velocity_angle > RightUp_angle)
 		{
 			//下
-			return SQUARE_SURFACE::down;
+			return SURFACE::down;
 		}
 		else
 		{
 			//左
-			return SQUARE_SURFACE::left;
+			return SURFACE::left;
 		}
 	}
 
-	return SQUARE_SURFACE::no_hit;
+	return SURFACE::no_hit;
 
 }
 

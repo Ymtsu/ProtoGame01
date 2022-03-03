@@ -16,7 +16,7 @@
 // ç\ë¢ëÃíËã`
 //*****************************************************************************
 
-enum class SQUARE_SURFACE : const char
+enum class SURFACE : const char
 {
 	min_error = -1,
 	no_hit,
@@ -54,9 +54,9 @@ bool CollisionBB(D3DXVECTOR2 pos1, D3DXVECTOR2 pos2, D3DXVECTOR2 size1, D3DXVECT
 bool CollisionCC(D3DXVECTOR2 pos1, D3DXVECTOR2 pos2, float size1, float size2);
 
 
-SQUARE_SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
+SURFACE CollisionBB_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
 	D3DXVECTOR2 block_old_pos, D3DXVECTOR2 player_size, D3DXVECTOR2 block_size);
-SQUARE_SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
+SURFACE PREDICT_SURFACE(D3DXVECTOR2 player_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 player_old_pos,
 	D3DXVECTOR2 block_old_pos, D3DXVECTOR2 player_size, D3DXVECTOR2 block_size);
 
 bool CollisionPIS_UP(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 ball_old_pos, D3DXVECTOR2 ball_size, D3DXVECTOR2 block_size);
