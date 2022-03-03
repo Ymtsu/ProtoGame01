@@ -100,7 +100,7 @@ void UpdatePlayer(void)
 	{
 
 
-		if (GetKeyboardPress(DIK_W))
+		if (GetKeyboardTrigger(DIK_W) || IsButtonTriggered(0, XINPUT_GAMEPAD_X))
 		{
 			g_JumpUse = true;
 
@@ -118,7 +118,10 @@ void UpdatePlayer(void)
 		//	
 		//}
 
-		if (GetKeyboardPress(DIK_A))
+		
+		int PAD = GetThumbLeftX(0);
+
+		if (GetKeyboardPress(DIK_A) || PAD < 0)
 		{
 			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x - 1.0f, g_Player.pos.y)) != 1)
 				g_Player.pos.x -= 3.0f;
@@ -126,8 +129,8 @@ void UpdatePlayer(void)
 			g_Player.dirction = Left;
 			
 		}
-
-		if (GetKeyboardPress(DIK_D))
+		
+		if (GetKeyboardPress(DIK_D) || PAD > 0)
 		{
 			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x + 1.0f, g_Player.pos.y)) != 1)
 				g_Player.pos.x += 3.0f;
@@ -239,7 +242,7 @@ void UpdatePlayer(void)
 	//}
 
 	//チェンソー使用
-	if (GetKeyboardTrigger(DIK_SPACE))
+	if (GetKeyboardTrigger(DIK_SPACE) || IsButtonTriggered(0, XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		/*PlaySound(g_ShotSENo, 0);*/
 
