@@ -37,7 +37,7 @@ D3DXVECTOR2 SingleBounce(float Coefficient_restitution, D3DXVECTOR2 vector)
 float Pulley(int weight, int quantity, int power)
 {
 	float lifting_height = 0.0f;
-	lifting_height = power - (weight / quantity);
+	lifting_height = (float)power - ((float)weight / quantity);
 
 	return lifting_height;
 }
