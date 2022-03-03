@@ -111,7 +111,7 @@ void UpdateChainsaw(void)
 			g_Chainsaw[ChainsawNum].OldCharge = g_Chainsaw[ChainsawNum].Charge;
 
 			//ChargeçXêV
-			if (GetKeyboardPress(DIK_SPACE))
+			if (GetKeyboardPress(DIK_SPACE)||IsButtonPressed(0, XINPUT_GAMEPAD_RIGHT_SHOULDER))
 			{
 				g_Chainsaw[ChainsawNum].Charge += 1;
 			}
