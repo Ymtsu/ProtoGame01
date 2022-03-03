@@ -23,8 +23,8 @@ HRESULT Wood::Init()
 
 	//切り株
 	Wood::m_stump_texture = LoadTexture("data/TEXTURE/058865.png");
-	Wood::m_stump_pos = D3DXVECTOR2(Wood::m_pos.x/2, Wood::m_pos.y / 2);
-	Wood::m_stump_size = D3DXVECTOR2(100.0f, 600.0f);
+	Wood::m_stump_pos = D3DXVECTOR2(Wood::m_pos.x, Wood::m_pos.y - (Wood::m_size.y / 4));
+	Wood::m_stump_size = D3DXVECTOR2(100.0f, 600.0f / 4);
 	Wood::m_state = WoodState::stand;
 	return S_OK;
 }
@@ -43,43 +43,12 @@ void Wood::Uninit()
 void Wood::Update()
 {
 
-	if (Wood::m_use)
-	{
-		//チェーンソーとの判定
-		switch ((CollisionBB_SURFACE(p_Chainsaw->pos, Wood::m_pos, p_Chainsaw->pos, Wood::m_pos, D3DXVECTOR2(p_Chainsaw->w, p_Chainsaw->h), Wood::m_size)))
-		{
-		case SURFACE::min_error:
-			break;
-		case SURFACE::left:
-			
-			break;
-		case SURFACE::right:
-			
-			break;
-		}
-		//プレイヤーとの判定
-		switch ((CollisionBB_SURFACE(p_Player->pos, Wood::m_pos, p_Player->old_pos, Wood::m_pos, D3DXVECTOR2(p_Player->w, p_Player->h), Wood::m_size)))
-		{
-		case SURFACE::min_error:
-			break;
-		case SURFACE::left:
-			if (Wood::m_hp <= 0)
-			{
-			}
-			break;
-		case SURFACE::right:
-			if (Wood::m_hp <= 0)
-			{
-			}
-			break;
-		}
-	}
-
-
 	switch (Wood::m_state)
 	{
 	case WoodState::no_exit:
 		break;
+
+		//チェーンソーのダメージ処理未実装
 	case WoodState::stand:
 		//チェーンソーとの判定
 		switch ((CollisionBB_SURFACE(p_Chainsaw->pos, Wood::m_pos, p_Chainsaw->pos, Wood::m_pos, D3DXVECTOR2(p_Chainsaw->w, p_Chainsaw->h), Wood::m_size)))
@@ -89,15 +58,23 @@ void Wood::Update()
 		case SURFACE::left:
 			if (Wood::m_hp <= 0)
 			{
-				Wood::m_surface = SURFACE::left;
+				Wood::m_direction = SURFACE::left;
 				Wood::m_state = WoodState::rotation;
+				//座標等変更	*あとでテクスチャ変更追加
+				Wood::m_pos.y = Wood::m_pos.y - Wood::m_size.y / 2;
+				Wood::m_size.y =Wood::m_stump_size.y * 3;
+				Wood::m_pos.y = Wood::m_pos.y + Wood::m_size.y / 2;
 			}
 			break;
 		case SURFACE::right:
 			if (Wood::m_hp <= 0)
 			{
-				Wood::m_surface = SURFACE::right;
+				Wood::m_direction = SURFACE::right;
 				Wood::m_state = WoodState::rotation;
+				//座標等変更	*あとでテクスチャ変更追加	
+				Wood::m_pos.y = Wood::m_pos.y - Wood::m_size.y / 2;
+				Wood::m_size.y = Wood::m_stump_size.y * 3;
+				Wood::m_pos.y = Wood::m_pos.y + Wood::m_size.y / 2;
 			}
 			break;
 		}
@@ -114,25 +91,37 @@ void Wood::Update()
 			break;
 		}
 		break;
+
 	case WoodState::rotation:
-		//ブロックの頂点座標を代入
+		//木が倒れる
+		switch (Wood::m_direction)
+		{
+		case SURFACE::right:
+			CutRightRot(Wood::m_rot);
+			Wood::m_pos = WoodRightMove(Wood::m_pos, Wood::m_stump_pos, Wood::m_stump_size, Wood::m_rot);
+			break;
+		case SURFACE::left:
+			CutLeftRot(Wood::m_rot);
+			Wood::m_pos = WoodLeftMove(Wood::m_pos, Wood::m_stump_pos, Wood::m_stump_size, Wood::m_rot);
+			break;
+		}
+
+		//ブロックの頂点座標
 		static D3DXVECTOR2* p_block_vertex = SquareVertexPos(Wood::m_pos, Wood::m_size, Wood::m_rot);
-		
+
 		if (Wood::m_rot > PI / 2)
 		{
 			Wood::m_state = WoodState::fallen;
 			break;
 		}
-
 		for (int i = 0; i < 4; i++)
 		{
 			Wood::m_vertex[i] = p_block_vertex[i];
 		}
-
 		break;
 
+		//チェーンソーの判定未実装
 	case WoodState::fallen:
-
 		//プレイヤーとの判定
 		switch (CollisionBB_SURFACE(p_Player->pos, Wood::m_pos, p_Player->old_pos, Wood::m_pos,
 			D3DXVECTOR2(p_Player->w, p_Player->h), D3DXVECTOR2(Wood::m_size.y, Wood::m_size.x)))
@@ -158,15 +147,20 @@ void Wood::Update()
 //=============================================================================
 void Wood::Draw() 
 {
-	if (Wood::m_use)
+	switch(Wood::m_state)
 	{
+	case WoodState::no_exit:
+		break;
+	case WoodState::stand:
 		DrawSprite(Wood::m_texture,Wood::m_pos.x, Wood::m_pos.y,Wood::m_size.x,Wood::m_size.y, 0.0f, 0.0f, 1.0f, 1.0f);
+		break;
+	case WoodState::rotation:
+		DrawSpriteVertex(Wood::m_texture, Wood::m_vertex[0], Wood::m_vertex[1], Wood::m_vertex[2], Wood::m_vertex[3], 0.0f, 0.0f, 1.0f, 1.0f);
+		break;
+	case WoodState::fallen:
+		DrawSpriteVertex(Wood::m_texture, Wood::m_vertex[0], Wood::m_vertex[1], Wood::m_vertex[2], Wood::m_vertex[3], 0.0f, 0.0f, 1.0f, 1.0f);
+		break;
 	}
-	/* if (Wood::m_destroy)
-	{
-		DrawSpriteRotate(Wood::m_texture, Wood::m_pos.x, Wood::m_pos.y, Wood::m_size.x, Wood::m_size.y,
-			0.0f, 0.0f, 1.0f, 1.0f, Wood::m_rot);
-	}*/
 }
 
 

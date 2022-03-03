@@ -25,11 +25,20 @@ public:
 	void Draw(void) override;
 
 private:
-	SURFACE m_surface = SURFACE::min_error;
+	SURFACE m_direction = SURFACE::min_error;
 	int m_stump_texture = {};
 	D3DXVECTOR2 m_stump_pos = {};
 	D3DXVECTOR2 m_stump_size = {};
 	D3DXVECTOR2 m_vertex[4] = {};
 	WoodState m_state = WoodState::no_exit;
+
 };
 
+float CutLeftRot(float rot);
+//‰E‚©‚çØ‚ç‚ê‚½‚Æ‚«
+float CutRightRot(float rot);
+
+//¶‚©‚çØ‚ç‚ê‚Ä‰E‚É“|‚ê‚é‚Æ‚«
+D3DXVECTOR2 WoodRightMove(D3DXVECTOR2 wood_move_pos, D3DXVECTOR2 stump_pos, D3DXVECTOR2 stump_size, float rot);
+//‰E‚©‚çØ‚ç‚ê‚Ä¶‚É“|‚ê‚é‚Æ‚«
+D3DXVECTOR2 WoodLeftMove(D3DXVECTOR2 wood_move_pos, D3DXVECTOR2 stump_pos, D3DXVECTOR2 stump_size, float rot);
