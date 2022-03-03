@@ -34,7 +34,7 @@ struct PLAYER
 	bool					use;					// true:使っている  false:未使用
 	float					w, h;					// 幅と高さ
 	D3DXVECTOR2				pos;					// ポリゴンの座標
-	D3DXVECTOR2				oldpos;					// ポリゴンの座標
+	D3DXVECTOR2				old_pos;					// ポリゴンの座標
 	float					rot;					// ポリゴンの回転量
 	int						texNo;					// テクスチャ番号
 	int						dirction;

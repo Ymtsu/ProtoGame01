@@ -5,57 +5,146 @@
 //こば、トミー
 //=============================================================================
 #include "wood.h"
-#include "collision.h"
 #include "Chainsaw.h"
+#include "player.h"
 
-CHAINSAW* p_Chainsaw = GetChainsaw();
+static CHAINSAW* p_Chainsaw = GetChainsaw();
+static PLAYER* p_Player = GetPlayer();
 
+//=============================================================================
+// 初期化処理
+//=============================================================================
 HRESULT Wood::Init()
 {
 	Wood::m_texture = LoadTexture("data/TEXTURE/058865.png");
 	Wood::m_pos = D3DXVECTOR2(600.0f, 600.0f);
 	Wood::m_size = D3DXVECTOR2(100.0f, 600.0f);
 	Wood::m_hp = 3;
-	
 
+	//切り株
+	Wood::m_stump_texture = LoadTexture("data/TEXTURE/058865.png");
+	Wood::m_stump_pos = D3DXVECTOR2(Wood::m_pos.x/2, Wood::m_pos.y / 2);
+	Wood::m_stump_size = D3DXVECTOR2(100.0f, 600.0f);
+	Wood::m_wood_state = WoodState::stand;
 	return S_OK;
 }
 
+//=============================================================================
+// 終了処理
+//=============================================================================
 void Wood::Uninit()
 {
 
 }
 
+//=============================================================================
+// 更新処理
+//=============================================================================
 void Wood::Update()
 {
+
 	if (Wood::m_use)
 	{
+		//チェーンソーとの判定
 		switch ((CollisionBB_SURFACE(p_Chainsaw->pos, Wood::m_pos, p_Chainsaw->pos, Wood::m_pos, D3DXVECTOR2(p_Chainsaw->w, p_Chainsaw->h), Wood::m_size)))
 		{
-		case SQUARE_SURFACE::min_error:
+		case SURFACE::min_error:
 			break;
-		case SQUARE_SURFACE::left:
-			Wood::m_use = false;
-
+		case SURFACE::left:
+			
 			break;
-		case SQUARE_SURFACE::right:
+		case SURFACE::right:
+			
+			break;
+		}
+		//プレイヤーとの判定
+		switch ((CollisionBB_SURFACE(p_Player->pos, Wood::m_pos, p_Player->old_pos, Wood::m_pos, D3DXVECTOR2(p_Player->w, p_Player->h), Wood::m_size)))
+		{
+		case SURFACE::min_error:
+			break;
+		case SURFACE::left:
+			if (Wood::m_hp <= 0)
+			{
+			}
+			break;
+		case SURFACE::right:
+			if (Wood::m_hp <= 0)
+			{
+			}
 			break;
 		}
 	}
-	
+
+
+	switch (Wood::m_wood_state)
+	{
+	case WoodState::no_exit:
+		break;
+	case WoodState::stand:
+		//チェーンソーとの判定
+		switch ((CollisionBB_SURFACE(p_Chainsaw->pos, Wood::m_pos, p_Chainsaw->pos, Wood::m_pos, D3DXVECTOR2(p_Chainsaw->w, p_Chainsaw->h), Wood::m_size)))
+		{
+		case SURFACE::min_error:
+			break;
+		case SURFACE::left:
+			if (Wood::m_hp <= 0)
+			{
+				Wood::m_surface = SURFACE::left;
+				Wood::m_wood_state = WoodState::rotation;
+			}
+			break;
+		case SURFACE::right:
+			if (Wood::m_hp <= 0)
+			{
+				Wood::m_surface = SURFACE::right;
+				Wood::m_wood_state = WoodState::rotation;
+			}
+			break;
+		}
+		//プレイヤーとの判定
+		switch ((CollisionBB_SURFACE(p_Player->pos, Wood::m_pos, p_Player->old_pos, Wood::m_pos, D3DXVECTOR2(p_Player->w, p_Player->h), Wood::m_size)))
+		{
+		case SURFACE::min_error:
+			break;
+		case SURFACE::left:
+			p_Player->pos.x = Wood::m_pos.x - (Wood::m_size.x + p_Player->w) / 2;
+			break;
+		case SURFACE::right:
+			p_Player->pos.x = Wood::m_pos.x + (Wood::m_size.x + p_Player->w) / 2;
+			break;
+		}
+		break;
+	case WoodState::rotation:
+		//ブロックの頂点座標を代入
+		static D3DXVECTOR2* p_block_vertex = SquareVertexPos(Wood::m_pos, Wood::m_size, Wood::m_rot);
+		
+		for (int i = 0; i < 4; i++)
+		{
+			Wood::m_vertex[i] = p_block_vertex[i];
+		}
+		break;
+
+	case WoodState::fallen:
+		break;
+	}
 }
 
+//=============================================================================
+// 描画処理
+//=============================================================================
 void Wood::Draw() 
 {
-	if (Wood::m_use == true)
+	if (Wood::m_use)
 	{
 		DrawSprite(Wood::m_texture,Wood::m_pos.x, Wood::m_pos.y,Wood::m_size.x,Wood::m_size.y, 0.0f, 0.0f, 1.0f, 1.0f);
 	}
-
-	if(Wood::m_use == false)
-	DrawSpriteColorRotate(Wood::m_texture, Wood::m_pos.x, Wood::m_pos.y, Wood::m_size.x, Wood::m_size.y, 0.0f, 0.0f, 1.0f, 1.0f,
-		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), Wood::m_rot);
+	/* if (Wood::m_destroy)
+	{
+		DrawSpriteRotate(Wood::m_texture, Wood::m_pos.x, Wood::m_pos.y, Wood::m_size.x, Wood::m_size.y,
+			0.0f, 0.0f, 1.0f, 1.0f, Wood::m_rot);
+	}*/
 }
+
 
 //=============================================================================
 // 回す角度

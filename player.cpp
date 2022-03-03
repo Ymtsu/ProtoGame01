@@ -65,7 +65,7 @@ HRESULT InitPlayer(void)
 	//‰Šú‰»
 	g_Player.pos.x = SCREEN_WIDTH / 2;
 	g_Player.pos.y = 370;
-	g_Player.oldpos = D3DXVECTOR2(0.0f, 0.0f);
+	g_Player.old_pos = D3DXVECTOR2(0.0f, 0.0f);
 	g_Player.w = 100.0f;
 	g_Player.h = 100.0f;
 	g_Player.use = true;
@@ -90,9 +90,9 @@ void UninitPlayer(void)
 //=============================================================================
 void UpdatePlayer(void)
 {
-	if (g_Player.pos != g_Player.oldpos)
+	if (g_Player.pos != g_Player.old_pos)
 	{
-		g_Player.oldpos = g_Player.pos;
+		g_Player.old_pos = g_Player.pos;
 	}
 
 	//ˆÚ“®ƒtƒ‰ƒO‚ª0‚Ì‚Ì‚İˆÚ“®‰Â”\

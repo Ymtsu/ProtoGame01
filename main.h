@@ -14,6 +14,9 @@
 
 #define _CRT_SECURE_NO_WARNINGS			// scanf ÇÃwarningñhé~
 #include <stdio.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
 #include <d3d11.h>
 #include <d3dx11.h>
