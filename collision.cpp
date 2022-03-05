@@ -75,6 +75,15 @@ float CROSS_PRODUCT(D3DXVECTOR2 vector_A, D3DXVECTOR2 vector_B)
 	return(Cross_Product);
 }
 
+//POS_AからPOS_Bまでの傾き
+float TILT(D3DXVECTOR2 pos_A, D3DXVECTOR2 pos_B)
+{
+	float Tilt = 0.0f;
+	Tilt = (pos_B.y - pos_A.y) / (pos_B.x - pos_A.x);
+
+	return Tilt;
+}
+
 //=============================================================================
 
 
@@ -1088,4 +1097,42 @@ bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_cent
 
 	//角度の合計が0以上ならtrue
 	return (fabs(result) >= 0.01f);
+}
+
+//=============================================================================
+//CIRCLE_AとCIRCLE_Bが重なった時、CIRCLE_Bを外接する座標まで戻す
+//=============================================================================
+float RETURN_CIRCLE_INTERSECTION(D3DXVECTOR2 pos_A, D3DXVECTOR2 pos_B, D3DXVECTOR2 old_pos_B, float radius_A, float radius_B, float rot_B, float old_rot_B)
+{
+	//仮想半径の2乗
+	float virtual_radius = powf(radius_A + radius_B, 2.0f);
+	//pos_Aとpos_Bの長さの2乗
+	float A_B_length = LENGTH(pos_B - pos_A);
+	//pos_Aとold_pos_Bの長さの2乗
+	float A_old_B_length = LENGTH(old_pos_B - pos_A);
+
+	//仮想半径の2乗とpos_Aとpos_Bの長さの2乗が同じならそのまま返す
+	if (virtual_radius == A_B_length)
+	{
+		return rot_B;
+	}
+	//仮想半径の2乗とpos_Aとold_pos_Bの長さの2乗が同じならそのまま返す
+	if (virtual_radius == A_old_B_length)
+	{
+		return old_rot_B;
+	}
+
+	//pos_Aとpos_Bの長さの2乗と仮想半径の2乗の差
+	float length_difference = virtual_radius - A_B_length;
+	//pos_Aとold_pos_Bの長さの2乗と仮想半径の2乗の差
+	float old_length_difference = virtual_radius - A_old_B_length;
+
+	//長さの変化量
+	float length_change = length_difference - old_length_difference;
+	//角度の変化量
+	float rot_change = rot_B - old_rot_B;
+	//外接している時の角度
+	float rot_inter_section = old_rot_B + ((rot_change * old_length_difference) / length_change);
+
+	return rot_inter_section;
 }

@@ -47,6 +47,7 @@ float LENGTH(D3DXVECTOR2 vector);
 D3DXVECTOR2 VECTOR_NORMALIZE(D3DXVECTOR2 vector);
 float INNER_PRODUCT(D3DXVECTOR2 vector_A, D3DXVECTOR2 vector_B);
 float CROSS_PRODUCT(D3DXVECTOR2 vector_A, D3DXVECTOR2 vector_B);
+float TILT(D3DXVECTOR2 POS_A, D3DXVECTOR2 POS_B); 
 
 //=============================================================================
 
