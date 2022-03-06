@@ -205,21 +205,21 @@ void UpdatePlayer(void)
 	}
 
 	//地面判定（現在はCollisionBB使用）
-	//if (CollisionBB(g_Player.pos, D3DXVECTOR2((SCREEN_WIDTH / 2), 480.0f), D3DXVECTOR2((g_Player.size.x), (g_Player.size.y)), D3DXVECTOR2((SCREEN_WIDTH + 160.0f), 160.0f)) == true)
-	//{
-	//	g_JumpUse = false;
-	//	g_Player.vector.y = 5.0f;
-	//	/*g_GravityUse = false;
-	//	g_Gravity = 0.0f;*/
-	//}
-	//else
-	//{
-	//	g_Gravity = Gravity(1.0f);
-	//	g_GravityUse = true;
-	//}
+	if (CollisionBB(g_Player.pos, D3DXVECTOR2((SCREEN_WIDTH / 2), 480.0f), D3DXVECTOR2((g_Player.size.x), (g_Player.size.y)), D3DXVECTOR2((SCREEN_WIDTH + 160.0f), 160.0f)) == true)
+	{
+		g_JumpUse = false;
+		g_Player.vector.y = 5.0f;
+		g_GravityUse = false;
+		g_Gravity = 0.0f;
+	}
+	else
+	{
+		g_Gravity = Gravity(1.0f);
+		g_GravityUse = true;
+	}
 
 	//temporary groundcheck
-	if (g_Player.pos.y >= 370.0f)
+	/*if (g_Player.pos.y >= 370.0f)
 	{
 		g_Player.isgrounded = true;
 		g_GravityUse = false;
@@ -230,12 +230,13 @@ void UpdatePlayer(void)
 		g_Player.isgrounded = false;
 		g_Gravity = Gravity(3.0f);
 		g_GravityUse = true;
-	}
+	}*/
 
 	//重力フラグ使用時
 	if (g_GravityUse == true)
 	{
 		g_Player.vector.y = Gravity(g_Player.vector.y);
+		//g_Player.vector.y = Gravity(5.0f);
 	}
 
 	//次マップへ切り替える
