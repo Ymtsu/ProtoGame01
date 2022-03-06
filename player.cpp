@@ -24,7 +24,6 @@
 // マクロ定義
 //*****************************************************************************
 
-
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
@@ -70,6 +69,9 @@ HRESULT InitPlayer(void)
 	g_Player.h = 100.0f;
 	g_Player.use = true;
 	g_Player.dirction = Right;
+	g_Player.isgrounded = false;
+	g_Player.isdashing = false;
+	g_Player.dashtimer = 0.0f;
 
 	//重力初期化
 	g_GravityUse = true;
@@ -100,7 +102,7 @@ void UpdatePlayer(void)
 	{
 
 
-		if (GetKeyboardPress(DIK_W))
+		if (GetKeyboardPress(DIK_W) && g_Player.isgrounded == true)
 		{
 			g_JumpUse = true;
 
@@ -121,7 +123,7 @@ void UpdatePlayer(void)
 		if (GetKeyboardPress(DIK_A))
 		{
 			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x - 1.0f, g_Player.pos.y)) != 1)
-				g_Player.pos.x -= 3.0f;
+				g_Player.pos.x -= 5.0f;
 
 			g_Player.dirction = Left;
 			
@@ -130,12 +132,37 @@ void UpdatePlayer(void)
 		if (GetKeyboardPress(DIK_D))
 		{
 			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x + 1.0f, g_Player.pos.y)) != 1)
-				g_Player.pos.x += 3.0f;
+				g_Player.pos.x += 5.0f;
 
 			g_Player.dirction = Right;
 			
 		}
 
+		//ダッシュ
+		if(GetKeyboardPress(DIK_E) && g_Player.dirction == Right && g_Player.isdashing == false)
+		{
+			g_Player.isdashing = true;
+			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x + 1.0f, g_Player.pos.y)) != 1)
+				g_Player.pos.x += 195.0f;
+		}
+
+		if (GetKeyboardPress(DIK_E) && g_Player.dirction == Left && g_Player.isdashing == false)
+		{
+			g_Player.isdashing = true;
+			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x + 1.0f, g_Player.pos.y)) != 1)
+				g_Player.pos.x -= 195.0f;
+		}
+
+		if (g_Player.isdashing == true)
+		{
+			g_Player.dashtimer = g_Player.dashtimer  + 1.0f;
+		}
+
+		if (g_Player.dashtimer >= 60.0f) //1s間 クールダウン
+		{
+			g_Player.dashtimer = 0.0f;
+			g_Player.isdashing = false;
+		}
 	}
 
 	switch (g_Player.dirction)
@@ -163,8 +190,9 @@ void UpdatePlayer(void)
 	//ジャンプフラグ使用時
 	if (g_JumpUse == true)
 	{
-		g_Player.pos.y -= 3.0f;
-		if (g_Player.pos.y <= 320.0f)
+		g_Player.pos.y -= 9.0f; //jump speed ジャンプ速度
+
+		if (g_Player.pos.y <= 220.0f) //max jump height ジャンプの高さ
 		{
 			g_JumpUse = false;
 		}
@@ -178,7 +206,7 @@ void UpdatePlayer(void)
 	}
 
 	//地面判定（現在はCollisionBB使用）
-	if (CollisionBB(g_Player.pos, D3DXVECTOR2((SCREEN_WIDTH / 2), 480.0f), D3DXVECTOR2((g_Player.w), (g_Player.h)), D3DXVECTOR2((SCREEN_WIDTH + 160.0f), 160.0f)) == true)
+	/*if (CollisionBB(g_Player.pos, D3DXVECTOR2((SCREEN_WIDTH / 2), 480.0f), D3DXVECTOR2((g_Player.w), (g_Player.h)), D3DXVECTOR2((SCREEN_WIDTH + 160.0f), 160.0f)) == true)
 	{
 		g_GravityUse = false;
 		g_Gravity = 0.0f;
@@ -186,6 +214,20 @@ void UpdatePlayer(void)
 	else
 	{
 		g_Gravity = Gravity(1.0f);
+		g_GravityUse = true;
+	}*/
+
+	//temporary groundcheck
+	if (g_Player.pos.y >= 370.0f)
+	{
+		g_Player.isgrounded = true;
+		g_GravityUse = false;
+		g_Gravity = 0.0f;
+	}
+	else
+	{
+		g_Player.isgrounded = false;
+		g_Gravity = Gravity(3.0f);
 		g_GravityUse = true;
 	}
 

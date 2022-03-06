@@ -38,6 +38,9 @@ struct PLAYER
 	float					rot;					// ポリゴンの回転量
 	int						texNo;					// テクスチャ番号
 	int						dirction;
+	bool                    isgrounded;
+	bool                    isdashing;
+	float                   dashtimer;
 };
 
 
