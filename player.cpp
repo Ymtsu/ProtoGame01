@@ -63,10 +63,10 @@ HRESULT InitPlayer(void)
 
 	//初期化
 	g_Player.pos.x = SCREEN_WIDTH / 2;
-	g_Player.pos.y = 370;
+	g_Player.pos.y = 350.0f;
 	g_Player.oldpos = D3DXVECTOR2(0.0f, 0.0f);
-	g_Player.w = 100.0f;
-	g_Player.h = 100.0f;
+	g_Player.vector = D3DXVECTOR2(5.0f, 3.0f);
+	g_Player.size = D3DXVECTOR2(100.0f, 100.0f);
 	g_Player.use = true;
 	g_Player.dirction = Right;
 	g_Player.isgrounded = false;
@@ -102,7 +102,7 @@ void UpdatePlayer(void)
 	{
 
 
-		if (GetKeyboardPress(DIK_W) && g_Player.isgrounded == true)
+		if (GetKeyboardPress(DIK_W) || IsButtonTriggered(0, XINPUT_GAMEPAD_X) && g_Player.isgrounded == true)
 		{
 			g_JumpUse = true;
 
@@ -120,19 +120,24 @@ void UpdatePlayer(void)
 		//	
 		//}
 
-		if (GetKeyboardPress(DIK_A))
+		
+		int PAD = GetThumbLeftX(0);
+
+		if (GetKeyboardPress(DIK_A) || PAD < 0)
 		{
 			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x - 1.0f, g_Player.pos.y)) != 1)
-				g_Player.pos.x -= 5.0f;
+				//g_Player.pos.x -= 5.0f;
+			   g_Player.pos.x -= g_Player.vector.x;
 
 			g_Player.dirction = Left;
 			
 		}
-
-		if (GetKeyboardPress(DIK_D))
+		
+		if (GetKeyboardPress(DIK_D) || PAD > 0)
 		{
 			if (GetMapEnter(D3DXVECTOR2(g_Player.pos.x + 1.0f, g_Player.pos.y)) != 1)
-				g_Player.pos.x += 5.0f;
+				//g_Player.pos.x += 5.0f;
+			    g_Player.pos.x += g_Player.vector.x;
 
 			g_Player.dirction = Right;
 			
@@ -190,32 +195,28 @@ void UpdatePlayer(void)
 	//ジャンプフラグ使用時
 	if (g_JumpUse == true)
 	{
-		g_Player.pos.y -= 9.0f; //jump speed ジャンプ速度
+		//g_Player.pos.y -= 9.0f; //jump speed ジャンプ速度
+		g_Player.pos.y -= g_Player.vector.y;
 
 		if (g_Player.pos.y <= 220.0f) //max jump height ジャンプの高さ
 		{
 			g_JumpUse = false;
 		}
-
-	}
-
-	//重力フラグ使用時
-	if (g_GravityUse == true)
-	{
-		g_Player.pos.y += g_Gravity;
 	}
 
 	//地面判定（現在はCollisionBB使用）
-	/*if (CollisionBB(g_Player.pos, D3DXVECTOR2((SCREEN_WIDTH / 2), 480.0f), D3DXVECTOR2((g_Player.w), (g_Player.h)), D3DXVECTOR2((SCREEN_WIDTH + 160.0f), 160.0f)) == true)
-	{
-		g_GravityUse = false;
-		g_Gravity = 0.0f;
-	}
-	else
-	{
-		g_Gravity = Gravity(1.0f);
-		g_GravityUse = true;
-	}*/
+	//if (CollisionBB(g_Player.pos, D3DXVECTOR2((SCREEN_WIDTH / 2), 480.0f), D3DXVECTOR2((g_Player.size.x), (g_Player.size.y)), D3DXVECTOR2((SCREEN_WIDTH + 160.0f), 160.0f)) == true)
+	//{
+	//	g_JumpUse = false;
+	//	g_Player.vector.y = 5.0f;
+	//	/*g_GravityUse = false;
+	//	g_Gravity = 0.0f;*/
+	//}
+	//else
+	//{
+	//	g_Gravity = Gravity(1.0f);
+	//	g_GravityUse = true;
+	//}
 
 	//temporary groundcheck
 	if (g_Player.pos.y >= 370.0f)
@@ -231,6 +232,11 @@ void UpdatePlayer(void)
 		g_GravityUse = true;
 	}
 
+	//重力フラグ使用時
+	if (g_GravityUse == true)
+	{
+		g_Player.vector.y = Gravity(g_Player.vector.y);
+	}
 
 	//次マップへ切り替える
 	if (g_Player.pos.x > SCREEN_WIDTH)
@@ -262,9 +268,9 @@ void UpdatePlayer(void)
 	{
 		if (pEnemy[i].use == true)
 		{
-			if (CollisionBB(g_Player.pos,pEnemy[i].pos, D3DXVECTOR2((g_Player.w), (g_Player.h)), D3DXVECTOR2((pEnemy[i].w), (pEnemy[i].h)))) {
-				g_Player.w -= 1.0f;
-				g_Player.h -= 1.0f;
+			if (CollisionBB(g_Player.pos,pEnemy[i].pos, D3DXVECTOR2((g_Player.size.x), (g_Player.size.y)), D3DXVECTOR2((pEnemy[i].w), (pEnemy[i].h)))) {
+				g_Player.size.x -= 1.0f;
+				g_Player.size.y -= 1.0f;
 			}
 		}
 	}
@@ -281,7 +287,7 @@ void UpdatePlayer(void)
 	//}
 
 	//チェンソー使用
-	if (GetKeyboardTrigger(DIK_SPACE))
+	if (GetKeyboardTrigger(DIK_SPACE) || IsButtonTriggered(0, XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		/*PlaySound(g_ShotSENo, 0);*/
 
@@ -311,7 +317,7 @@ void UpdatePlayer(void)
 void DrawPlayer(void)
 {
 	
-	DrawSprite(g_Player.texNo, g_Player.pos.x, g_Player.pos.y, g_Player.w, g_Player.h, g_AnimePtn * 0.33333f, g_CharaUV, 0.3333f, 0.25f);
+	DrawSprite(g_Player.texNo, g_Player.pos.x, g_Player.pos.y, g_Player.size.x, g_Player.size.y, g_AnimePtn * 0.33333f, g_CharaUV, 0.3333f, 0.25f);
 }
 
 //=============================================================================
