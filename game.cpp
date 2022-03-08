@@ -20,6 +20,7 @@
 #include "score.h"
 #include "bg.h"
 #include "Chainsaw.h"
+#include "map.h"
 
 /*------------------------------------------------------------------------------
    ’è”’è‹`
@@ -52,6 +53,7 @@ void InitGame(void)
 	InitChainsaw();
 	InitScore();
 	InitBG();
+	InitMap();
 
 	g_BGMNo = LoadSound("data/BGM/sample001.wav");
 
