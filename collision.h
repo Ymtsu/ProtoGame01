@@ -26,7 +26,6 @@ enum class SURFACE : const char
 	down
 };
 
-
 struct INTERSECTION_POS 
 {
 	D3DXVECTOR2 up;

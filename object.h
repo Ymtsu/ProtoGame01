@@ -27,7 +27,7 @@ public:
 	virtual HRESULT Init(void) = 0;
 	virtual void Uninit(void) = 0;
 	virtual void Update(void) = 0;
-	virtual void Draw(void);
+	virtual void Draw(void) = 0;
 	
 	//セブンスター、ゲット!!
 	D3DXVECTOR2 GetPos() { return m_pos; }
@@ -59,11 +59,11 @@ protected:
 
 };
 
-void Object::Draw(void)
-{
-	if (Object::m_use == true)
-	{
-		DrawSprite(Object::m_texture, Object::m_pos.x, Object::m_pos.y, Object::m_size.x, Object::m_size.y,0.0f, 0.0f, 1.0f, 1.0f);
-	}
-}
+//void Object::Draw(void)
+//{
+//	if (Object::m_use == true)
+//	{
+//		DrawSprite(Object::m_texture, Object::m_pos.x, Object::m_pos.y, Object::m_size.x, Object::m_size.y,0.0f, 0.0f, 1.0f, 1.0f);
+//	}
+//}
 

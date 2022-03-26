@@ -180,7 +180,7 @@ bool CollisionCL(D3DXVECTOR2 circle_pos, D3DXVECTOR2 line_min_pos, D3DXVECTOR2 l
 			return true;
 		}
 		//始点から円の中心の長さの二乗か、終点から円の中心の長さの二乗が、円の半径の二乗よりも短かったら当たり
-		if (LENGTH(min_to_circle) < powf(circle_radius,2.0f) || LENGTH(max_to_circle) < powf(circle_radius, 2.0f))
+		if (LENGTH(min_to_circle) < powf(circle_radius, 2.0f) || LENGTH(max_to_circle) < powf(circle_radius, 2.0f))
 		{
 			return true;
 		}
@@ -388,7 +388,7 @@ bool CollisionPIS_DOWN(D3DXVECTOR2 ball_pos, D3DXVECTOR2 block_pos, D3DXVECTOR2 
 	//Yの座標の変化率からみたXの予想交点座標
 	predict_ball_to_inter_section_x = ball_old_pos.x + (ball_velocity.x * S);
 	//予想交点座標がブロックの左端から右端の内側にある時
-	if ((predict_ball_to_inter_section_x< x_max) || (predict_ball_to_inter_section_x > x_min))
+	if ((predict_ball_to_inter_section_x < x_max) || (predict_ball_to_inter_section_x > x_min))
 	{
 		//ボールのold_posとposを繋いだ線とブロックの下面が交差しているとき
 		if (block_down_y < ball_old_up && block_down_y > ball_up)
@@ -858,7 +858,7 @@ bool CollisionCRB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_ra
 		float right_up_to_ball_length = LENGTH(D3DXVECTOR2(virtual_ball_pos.x - block_max_x, virtual_ball_pos.y - block_min_y));
 		//右下
 		float right_down_to_ball_length = LENGTH(D3DXVECTOR2(virtual_ball_pos.x - block_max_x, virtual_ball_pos.y - block_max_y));
-		
+
 		//半径の2乗
 		float radius_square = powf(circle_radius, 2.0f);
 
@@ -867,7 +867,7 @@ bool CollisionCRB(D3DXVECTOR2 circle_pos, D3DXVECTOR2 block_pos, float circle_ra
 		if (radius_square > left_up_to_ball_length)
 		{
 			return true;
-		 }
+		}
 		//左下
 		if (radius_square > left_down_to_ball_length)
 		{
@@ -1085,7 +1085,7 @@ bool CollisionConvexPoint(D3DXVECTOR2* block_vertex_pos, D3DXVECTOR2 player_cent
 		float cross = CROSS_PRODUCT(Line1, Line2);
 
 		//ふたつの辺の外積と面の法線との外積がマイナス方向だった場合は逆回転
-		if (INNER_PRODUCT(D3DXVECTOR2(0.0f,cross), normal_vector) < 0)
+		if (INNER_PRODUCT(D3DXVECTOR2(0.0f, cross), normal_vector) < 0)
 		{
 			angle *= -1;
 		}
